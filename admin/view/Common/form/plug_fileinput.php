@@ -1,8 +1,8 @@
     <!--上传插件 开始-->
-    <link rel="stylesheet" href="http://static.furong.me/admin/js/bootstrap-fileinput/css/fileinput.css">
-    <script src="http://static.furong.me/admin/js/bootstrap-fileinput/js/fileinput.js"></script>
-    <script src="http://static.furong.me/admin/js/bootstrap-fileinput/themes/fa/theme.js"></script>
-    <script src="http://static.furong.me/admin/js/bootstrap-fileinput/js/locales/zh.js"></script>
+    <link rel="stylesheet" href="/static/admin/js/bootstrap-fileinput/css/fileinput.css">
+    <script src="/static/admin/js/bootstrap-fileinput/js/fileinput.js"></script>
+    <script src="/static/admin/js/bootstrap-fileinput/themes/fa/theme.js"></script>
+    <script src="/static/admin/js/bootstrap-fileinput/js/locales/zh.js"></script>
     <script>
         function fileInput(uploadId) {
 //            var inputName = $('#' + uploadId).parent().find('input[type=hidden]').attr('name')

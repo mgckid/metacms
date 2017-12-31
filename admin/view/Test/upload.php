@@ -1,5 +1,5 @@
 <?php $this->layout('Layout/admin'); ?>
-<script type="text/javascript" src="http://static.furong.me/admin/js/plupload-master/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/plupload-master/js/plupload.full.min.js"></script>
 <style>
     .upload-box ul{overflow:hidden;_zoom:1;padding-left:0px; }
     .upload-box ul li{width: 150px;height: 150px;background: #EFEFEF;float:  left;overflow:hidden;border: 4px dashed #ddd;margin-right: 10px; position: relative;margin-bottom: 10px;}
@@ -65,8 +65,8 @@
                 unique_names: false,//当值为true时会为每个上传的文件生成一个唯一的文件名，
                 file_data_name: 'file',//指定文件上传时文件域的名称，默认为file,例如在php中你可以使用$_FILES['file']来获取上传的文件信息
                 /*不需要用到的属性 开始*/
-                /*flash_swf_url: 'http://static.furong.me/admin/js/plupload-master/js/Moxie.swf',//flash上传组件的url地址
-                 silverlight_xap_url: 'http://static.furong.me/admin/js/plupload-master/js/Moxie.xap'//silverlight上传组件的url地址
+                /*flash_swf_url: '/static/admin/js/plupload-master/js/Moxie.swf',//flash上传组件的url地址
+                 silverlight_xap_url: '/static/admin/js/plupload-master/js/Moxie.xap'//silverlight上传组件的url地址
                  filters: {
                  prevent_duplicates: true, //不允许选取重复文件
                  mime_types: [ //只允许上传图片和zip文件

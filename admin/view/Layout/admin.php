@@ -7,16 +7,16 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="http://static.furong.me/admin/adminlte/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/admin/adminlte/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/static/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="/static/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="http://static.furong.me/admin/adminlte/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/static/admin/adminlte/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="http://static.furong.me/admin/adminlte/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="/static/admin/adminlte/dist/css/skins/_all-skins.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,21 +28,21 @@
     <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
 
     <!-- jQuery 3.1.1 -->
-    <script src="http://static.furong.me/admin/adminlte/plugins/jQuery/jquery-3.1.1.min.js"></script>
+    <script src="/static/admin/adminlte/plugins/jQuery/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
-    <script src="http://static.furong.me/admin/adminlte/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/admin/adminlte/bootstrap/js/bootstrap.min.js"></script>
     <!-- SlimScroll -->
-    <script src="http://static.furong.me/admin/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="/static/admin/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
-    <script src="http://static.furong.me/admin/adminlte/plugins/fastclick/fastclick.js"></script>
+    <script src="/static/admin/adminlte/plugins/fastclick/fastclick.js"></script>
     <!-- AdminLTE App -->
-    <script src="http://static.furong.me/admin/adminlte/dist/js/adminlte.min.js"></script>
+    <script src="/static/admin/adminlte/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="http://static.furong.me/admin/adminlte/dist/js/demo.js"></script>
+    <script src="/static/admin/adminlte/dist/js/demo.js"></script>
 
     <!--扩展js引入 开始-->
-    <script src="http://static.furong.me/admin/js/layer-v2.1/layer/layer.js"></script>
-    <script src="http://static.furong.me/admin/js/ajaxForm/jquery.form.js"></script>
+    <script src="/static/admin/js/layer-v2.1/layer/layer.js"></script>
+    <script src="/static/admin/js/ajaxForm/jquery.form.js"></script>
     <!--扩展js引入 结束-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
