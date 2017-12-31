@@ -1,0 +1,2 @@
+<?= $this->layout('Layout/admin') ?>
+
