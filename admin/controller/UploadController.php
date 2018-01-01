@@ -15,7 +15,7 @@ use Upload\Validation\Size;
  * 上传管理
  * Desc: UploadController
  * @privilege 上传管理|Admin/Upload|c254964d-200a-11e7-8ad5-9cb3ab404081|3
- * @author CPR137
+ * @author metacms
  */
 class UploadController extends UserBaseController
 {

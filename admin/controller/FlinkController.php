@@ -12,7 +12,7 @@ use app\logic\BaseLogic;
  * 友情链接管理控制器
  * @privilege 友情链接管理|Admin/Flink|c1a2f7e9-200a-11e7-8ad5-9cb3ab404081|1
  * Created by PhpStorm.
- * User: CPR137
+ * User: metacms
  * Date: 2016/7/29
  * Time: 14:12
  */

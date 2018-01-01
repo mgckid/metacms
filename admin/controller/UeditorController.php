@@ -7,7 +7,7 @@ use Ueditor\Uploader;
 /**
  * @privilege 百度编辑器操作|Admin/Ueditor|c23b5b93-200a-11e7-8ad5-9cb3ab404081|3
  * Created by PhpStorm.
- * User: CPR137
+ * User: metacms
  * Date: 2016/9/27
  * Time: 14:33
  */
