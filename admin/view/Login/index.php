@@ -9,9 +9,9 @@
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="/static/admin/adminlte/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="/static/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/admin/css/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="/static/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/static/admin/css/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/static/admin/adminlte/dist/css/AdminLTE.min.css">
     <!-- iCheck -->

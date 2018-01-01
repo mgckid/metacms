@@ -90,7 +90,7 @@ class BaseController extends Controller
     {
 
         if ($mode == 'Api') {
-            $host = C('HOME_URL');
+            $host = C('API_URL');
             $url = 'Api/' . $url;
         }
         if (empty($host)) {
