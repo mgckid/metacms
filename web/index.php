@@ -29,18 +29,10 @@
          佛祖保佑       永无BUG
 */
 error_reporting(E_ALL);
-ini_set('display_errors',true);
+ini_set('display_errors', true);
 #框架运行开发模式
 define('ENVIRONMENT', 'develop');
-define('APP_REAL_PATH',dirname(dirname(__FILE__)));
-define('APP_PATH',APP_REAL_PATH);
-$linuxPath = array(
-    '/home/wwwroot/framework/vendor',
-);
-set_include_path(get_include_path() . PATH_SEPARATOR . join(PATH_SEPARATOR, $linuxPath));
-$winPath = array(
-    'D:\www\github\framework/vendor/',
-    'D:\www\framework/vendor/',
-);
-set_include_path(get_include_path() . PATH_SEPARATOR . join(PATH_SEPARATOR, $winPath));
-require 'metacms\index.php';
+define('APP_REAL_PATH', dirname(dirname(__FILE__)));
+define('APP_PATH', APP_REAL_PATH);
+
+require APP_PATH . '/vendor/metacms\index.php';

@@ -89,33 +89,54 @@ try {
     $app_path = $container['config']->has(strtoupper(MODULE_NAME) . '_PATH') ? $container['config']->get(strtoupper(MODULE_NAME) . '_PATH') : APP_PATH . '/' . strtolower(MODULE_NAME);
     defined('MODULE_PATH') or define('MODULE_PATH', $app_path);
 
+    #加载扩展类
+    $extend_class_map = [];
     #添加公共扩展类加载位置
     $common_vendor_class_map = COMMON_PATH . '/vendor/class_map.php';
     if (file_exists($common_vendor_class_map)) {
-        $class_map_result = require($common_vendor_class_map);
-        if (is_array($class_map_result) && !empty($class_map_result)) {
-            foreach ($class_map_result as $key => $value) {
-                $loader->addPrefix($key, $value);
-            }
+        $result = require($common_vendor_class_map);
+        if (!empty($result) && is_array($result)) {
+            $extend_class_map = array_merge($extend_class_map, $result);
         }
     }
     #添加应用扩展类加载位置
     $app_vendor_class_map = APP_PATH . '/vendor/class_map.php';
     if (file_exists($app_vendor_class_map)) {
-        $class_map_result = require($app_vendor_class_map);
-        if (is_array($class_map_result) && !empty($class_map_result)) {
-            foreach ($class_map_result as $key => $value) {
-                $loader->addPrefix($key, $value);
-            }
+        $result = require($app_vendor_class_map);
+        if (!empty($result) && is_array($result)) {
+            $extend_class_map = array_merge($extend_class_map, $result);
         }
     }
-    #加载应用依赖脚本
-    $require_script = $config->get('REQUIRE_SCRIPT_MAP');
-    if (!empty($require_script)) {
-        foreach ($require_script as $value) {
+    if (!empty($extend_class_map)) {
+        foreach ($extend_class_map as $key => $value) {
+            $loader->addPrefix($key, $value);
+        }
+    }
+
+    #加载扩展脚本
+    $extend_function_map = [];
+    #添加公共扩展类加载位置
+    $common_function_map = COMMON_PATH . '/function/function_map.php';
+    if (file_exists($common_function_map)) {
+        $result = require($common_function_map);
+        if (!empty($result) && is_array($result)) {
+            $extend_function_map = array_merge($extend_function_map, $result);
+        }
+    }
+    #添加应用扩展类加载位置
+    $app_function_map = APP_PATH . '/function/function_map.php';
+    if (file_exists($app_function_map)) {
+        $result = require($app_function_map);
+        if (!empty($result) && is_array($result)) {
+            $extend_function_map = array_merge($extend_function_map, $result);
+        }
+    }
+    if (!empty($extend_function_map)) {
+        foreach ($extend_function_map as $key => $value) {
             require $value;
         }
     }
+
     #运行应用
     \metacms\base\Application::run();
 } catch (\Exception $e) {
