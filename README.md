@@ -1,6 +1,6 @@
 # metacms
 
-##github项目拓展地址
+##metacms项目托管地址
 
 https://github.com/mgckid/metacms
 
