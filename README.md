@@ -1,5 +1,9 @@
 # metacms
 
+##github项目拓展地址
+
+https://github.com/mgckid/metacms
+
 ##Overview
 
 metacms is a simple and extensible  content management system base on metacms mvc  framework.every data in metacms is a base meta data just like it name;
@@ -24,7 +28,8 @@ ORM处理数据库访问，使用了Pimple依赖注入组件管理组件依赖�
 metacms是我自己设计的一个cms系统(更像cmf),这个系统，后台模块和接口模块可以稳定的迭代开发，前台模块可以根据自己需要自行组织没有严格限制,可以做门户网站,个人博客，乃至扩展开发成商城都是可以的
 我开发这个系统历时2年，已经在我的其他项目中使用，由于只有我一个开发者，很多其他想法和功能还亟待更多开发者进来一起完善，希望更多的开发者加入进来，一起将这个系统完善的更好，在更多的项目中使用。
 
-metacms开发者QQ群:691932844
+metacms开发者QQ群:691932844 /作者QQ:654352323
+
 
 ##install
 
