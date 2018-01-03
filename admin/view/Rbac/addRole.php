@@ -27,6 +27,9 @@
             },
             success: function (data) {
                 layer.alert(data.msg)
+                setTimeout(function () {
+                    window.history.go(-1)
+                }, 2000);
             }
         });
     })

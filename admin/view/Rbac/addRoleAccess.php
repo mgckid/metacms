@@ -20,7 +20,7 @@
                         <select name="role_id" class="form-control">
                             <option value="">选择角色</option>
                             <?php foreach ($role as $v) { ?>
-                                <option  value="<?= $v['role_id'] ?>" <?= $roleId == $v['role_id'] ? 'selected="selected"' : '' ?>><?= $v['role_name'] ?></option>
+                                <option  value="<?= $v['role_id'] ?>" <?= $role_id == $v['role_id'] ? 'selected="selected"' : '' ?>><?= $v['role_name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>

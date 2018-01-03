@@ -257,7 +257,6 @@ function apiRequest($url, $data = [], $mode = 'Api', $method = 'get')
 }
 
 
-
 function main_image($request_data)
 {
     $field = 'main_image';
@@ -272,6 +271,7 @@ function main_image($request_data)
     }
     return $request_data;
 }
+
 \metacms\base\Application::hooks()->add_filter('publish_post', 'main_image');
 
 
@@ -288,6 +288,20 @@ function getImageUrlFromUrl($url)
 {
     $_url = explode('/', $url);
     return end($_url);
+}
+
+/**
+ * 获取uuid
+ * @access public
+ * @author furong
+ * @return \app\model\type
+ * @since 2018年1月3日 10:41:22
+ * @abstract
+ */
+function uuid()
+{
+    $model = new \app\model\AdminUserModel();
+    return $model->getUserId();
 }
 
 

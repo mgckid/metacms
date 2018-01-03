@@ -46,10 +46,10 @@ class BaseModel extends Model
     public function addRecord($data)
     {
         $return = false;
-        $id = $data[$this->pk];
+        $id = isset($data[$this->pk]) ? $data[$this->pk] : 0;
         $data['modified'] = getDateTime();
         $model = $this->orm();
-        if (empty($data[$this->pk])) {
+        if (!$id) {
             #添加
             unset($data[$this->pk]);
             $data['created'] = $data['modified'];
@@ -63,7 +63,7 @@ class BaseModel extends Model
                 $return = $result->set($data)
                     ->save();
             } else {
-                $this->setMessage('插入记录失败');
+                $this->setMessage('添加记录失败');
             }
         }
         return $return ? $id : $return;
