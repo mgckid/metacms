@@ -163,15 +163,9 @@ class RbacController extends UserBaseController
             $roleModel = new AdminRoleModel();
             $userModel = new AdminUserModel();
             #获取用户列表
-            $field = array('username', 'true_name');
-            $userList = $userModel->orm()
-                ->select($field)
-                ->find_array();
+            $userList = $userModel->getAllRecord('','id,username,true_name');
             #获取角色列表
-            $field = array('role_id', 'role_name');
-            $roleList = $roleModel->orm()
-                ->select($field)
-                ->find_array();
+            $roleList = $roleModel->getAllRecord('','role_id,role_name');
             $data = array(
                 'user' => $userList,
                 'role' => $roleList
@@ -488,7 +482,6 @@ class RbacController extends UserBaseController
         $count = $userModel->getRecordList('','', '', true);
         $page = new Page($count, $p, $pageSize);
         $list = $userModel->getRecordList('',$page->getOffset(), $pageSize);
-
         #获取列表字段
         $dictionarylogic = new BaseLogic();
         $list_init = $dictionarylogic->getListInit('admin_user','table');

@@ -11,7 +11,7 @@
                         <select name="user" class="form-control" id="user_list">
                             <option value="">请选择用户</option>
                             <?php foreach ($user as $v) { ?>
-                                <option value="<?= $v['username'] ?>"><?= $v['true_name'] ?></option>
+                                <option  value="<?= $v['username'] ?>" <?= $_GET['id'] == $v['id'] ? 'selected="selected"' : '' ?>><?= $v['true_name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -40,6 +40,9 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(function () {
+        $('#user_list').change();
+    })
     $('form[name=add_user_role]').ajaxForm({
         dataType: 'json',
         error: function () {
@@ -49,6 +52,7 @@
             layer.alert(data.msg)
         }
     });
+
 
     //切换用户获取角色
     $('#user_list').on('change', function () {
