@@ -395,5 +395,57 @@ class CmsController extends UserBaseController
         return $model->deleteRecordById($id);
     }
 
+    /**
+     * 文章分词
+     * @privilege 文章分词|Admin/Cms/ajaxFenci|f5a38fb2-f10e-11e7-83c7-00163e003500|3
+     */
+    public function ajaxFenci()
+    {
+        if (!IS_POST) {
+            $this->ajaxFail('非法请求');
+        }
+        $text = isset($_POST['content']) ? strip_tags(htmlspecialchars_decode($_POST['content'])) : '';
+        if (empty($text)) {
+            $this->ajaxFail('源数据不能为空');
+        }
+        $token = $this->getSiteInfo('site_fenci_token');
+        if (empty($token)) {
+            $this->ajaxFail('请先设置玻森分词api Token');
+        }
+
+        #过滤非法字符
+        $search = array(" ","　","\n","\r","\t","&nbsp");
+        $replace = array("","","","","","");
+        $text = str_replace($search, $replace, $text);
+
+        $fenci = new \BosonNLP\BosonNLP($token);
+        //提取关键字
+        $pram = [
+            'top_k' => 10,
+        ];
+        $result = $fenci->analysis($fenci::ACTION_KEYWORDS, $text, $pram);
+        if (!$result) {
+            $this->ajaxFail('分词失败');
+        }
+        $keyword = [];
+        foreach ($result[0] as $key => $val) {
+            $keyword[] = $val[1];
+        }
+        //提取描述
+        $data = [
+            'content' => $text,
+            'not_exceed' => 0,
+            'percentage' => 0.1,
+        ];
+        $result = $fenci->analysis($fenci::ACTION_SUMMARY, $data);
+        $summary = !empty($result) ? str_replace(PHP_EOL, "", $result) : '';
+        $return = [
+            'keyword' => join(',', $keyword),
+            'tag' => join(',', array_slice($keyword, 0, 5)),
+            'description' => $summary,
+        ];
+        $this->ajaxSuccess('获取成功', $return);
+    }
+
 
 }

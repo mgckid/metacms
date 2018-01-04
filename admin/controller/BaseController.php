@@ -24,7 +24,7 @@ class BaseController extends Controller
     {
     }
 
-    public function getSiteInfo()
+    public function getSiteInfo($key='')
     {
         $siteConfigModel = new \app\model\SiteConfigModel();
         $result = $siteConfigModel->getConfigList([], 'name,value');
@@ -32,7 +32,11 @@ class BaseController extends Controller
         foreach ($result as $value) {
             $site_info[$value['name']] = $value['value'];
         }
-        return $site_info;
+        if ($key && isset($site_info[$key])) {
+            return $site_info[$key];
+        }else{
+            return $site_info;
+        }
     }
 
 

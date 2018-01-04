@@ -42,14 +42,8 @@
     //分词操作
     $('#fenci').on('click', function () {
         var content = $('[name=content]').val();
-        var json = {
-            model_name: 'Article',
-            method_name: 'getFenci',
-            param: {
-                content: content
-            }
-        };
-        $.post('<?=U('admin/pop/index')?>', json, function (data) {
+        var data = {content: content}
+        $.post('<?=U('admin/Cms/ajaxFenci')?>', data, function (data) {
             if (data.status != 1) {
                 layer.alert(data.msg);
             }
