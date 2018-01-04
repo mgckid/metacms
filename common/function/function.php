@@ -271,7 +271,6 @@ function main_image($request_data)
     }
     return $request_data;
 }
-
 \metacms\base\Application::hooks()->add_filter('publish_post', 'main_image');
 
 

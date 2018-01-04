@@ -11,6 +11,7 @@
 namespace app\model;
 
 use app\logic\BaseLogic;
+use metacms\base\Application;
 
 class CmsPostModel extends BaseModel
 {
@@ -65,29 +66,6 @@ class CmsPostModel extends BaseModel
             $result = $this->getModelRecordInfoByPostId($pre_result['post_id'], $field);
         }
         return $result;
-    }
-
-
-    public function addCmsPostExtendData($table_name, $post_id, $field, $value)
-    {
-        $orm = $this->orm()->for_table($table_name)->use_id_column('id');
-        $data = [
-            'post_id' => $post_id,
-            'field' => $field,
-            'value' => $value
-        ];
-        $result = $orm->where('post_id', $post_id)
-            ->where('field', $field)
-            ->find_one();
-        if ($result) {
-            $return = $result->set($data)->save();
-        } else {
-            $return = $orm->create($data)->save();
-        }
-        if (!$return) {
-            throw new \Exception('文档扩展记录添加失败');
-        }
-        return $return;
     }
 
 
@@ -257,22 +235,31 @@ class CmsPostModel extends BaseModel
     }
 
 
-    public function addRecord($request_data)
+    public function addModelRecord($request_data)
     {
+        $request_data = Application::hooks()->apply_filters('publish_post', $request_data);
         #获取模型定义
         $baseLogic = new BaseLogic();
         $model_defined = $baseLogic->getModelDefined($request_data['model_id']);
         $cms_post_data = [];
-        $extend_data = [];
+        $cms_post_extend_attribute_data = [];
+        $cms_post_extend_text_data = [];
         foreach ($model_defined as $value) {
             if ($value['belong_to_table'] == 'cms_post') {
                 if (isset($request_data[$value['field_value']])) {
                     $cms_post_data[$value['field_value']] = $request_data[$value['field_value']];
                 }
-            } else {
-                if (isset($request_data[$value['field_value']])) {
-                    $extend_data[] = [
-                        'table_name' => $value['belong_to_table'],
+            } elseif ($value['belong_to_table'] == 'cms_post_extend_attribute') {
+                if (isset($request_data[$value['field_value']]) && !empty($request_data[$value['field_value']])) {
+                    $cms_post_extend_attribute_data[] = [
+                        'post_id' => $request_data['post_id'],
+                        'field' => $value['field_value'],
+                        'value' => $request_data[$value['field_value']],
+                    ];
+                }
+            } elseif ($value['belong_to_table'] == 'cms_post_extend_text') {
+                if (isset($request_data[$value['field_value']]) && !empty($request_data[$value['field_value']])) {
+                    $cms_post_extend_text_data[] = [
                         'post_id' => $request_data['post_id'],
                         'field' => $value['field_value'],
                         'value' => $request_data[$value['field_value']],
@@ -282,15 +269,25 @@ class CmsPostModel extends BaseModel
         }
         try {
             $this->beginTransaction();
-            $cms_post_result = parent::addRecord($cms_post_data);
-            if (!$cms_post_result) {
+            $result = $this->addRecord($cms_post_data);
+            if (!$result) {
                 throw new \Exception('文档主记录添加失败');
             }
-            if ($extend_data) {
-                foreach ($extend_data as $value) {
-                    $result = $this->addCmsPostExtendData($value['table_name'], $value['post_id'], $value['field'], $value['value']);
+            if ($cms_post_extend_attribute_data) {
+                $cmsPostExtendAttributeModel = new CmsPostExtendAttributeModel();
+                foreach ($cms_post_extend_attribute_data as $value) {
+                    $result = $cmsPostExtendAttributeModel->addRecord($value);
                     if (!$result) {
-                        throw new \Exception('文档扩展记录添加失败');
+                        throw new \Exception('文档扩展属性添加失败');
+                    }
+                }
+            }
+            if ($cms_post_extend_text_data) {
+                $cmsPostExtendTextModel = new CmsPostExtendTextModel();
+                foreach ($cms_post_extend_text_data as $value) {
+                    $result = $cmsPostExtendTextModel->addRecord($value);
+                    if (!$result) {
+                        throw new \Exception('文档扩展富文本添加失败');
                     }
                 }
             }
@@ -305,7 +302,7 @@ class CmsPostModel extends BaseModel
     }
 
     /**
-     * 删除单条记录
+     * 删除文档记录
      * @access public
      * @author furong
      * @param $id
@@ -313,15 +310,46 @@ class CmsPostModel extends BaseModel
      * @since 2017年7月28日 09:46:43
      * @abstract
      */
-    public function deleteRecordById($id)
+    public function deleteModelRecord($id)
     {
-        $result = $this->getRecordInfoById($id);
-        $data = [
-            $this->pk => $id,
-            'deleted' => 1,
-            'model_id' => $result['model_id']
-        ];
-        return $this->addRecord($data);
+        $post_result = $this->getRecordInfoById($id);
+        if (!$post_result) {
+            $this->setMessage('文档不存在');
+            return false;
+        }
+        try {
+            $this->beginTransaction();
+            #删除主记录
+            $result = $this->deleteRecordById($id);
+            if (!$result) {
+                throw new \Exception('删除文档主记录失败');
+            }
+            #删除扩展记录
+            $cmsPostExtendAttributeModel = new CmsPostExtendAttributeModel();
+            $orm = $cmsPostExtendAttributeModel->orm()->where('post_id', $post_result['post_id']);
+            $list = $cmsPostExtendAttributeModel->getAllRecord($orm);
+            foreach ($list as $value) {
+                $result = $cmsPostExtendAttributeModel->deleteRecordById($value['id']);
+                if (!$result) {
+                    throw new \Exception('删除文档扩展属性失败');
+                }
+            }
+            $cmsPostExtendTextModel = new CmsPostExtendTextModel();
+            $orm = $cmsPostExtendTextModel->orm()->where('post_id', $post_result['post_id']);
+            $list = $cmsPostExtendTextModel->getAllRecord($orm);
+            foreach ($list as $value) {
+                $result = $cmsPostExtendTextModel->deleteRecordById($value['id']);
+                if (!$result) {
+                    throw new \Exception('删除文档扩展富文本失败');
+                }
+            }
+            $this->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $this->setMessage($e->getMessage());
+            return false;
+        }
     }
 
 

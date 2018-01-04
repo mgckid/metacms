@@ -99,12 +99,12 @@ class CmsController extends UserBaseController
             $baseLogic = new BaseLogic();
             $model_result = $baseLogic->getModelInfo($model_id);
             if (!$model_result) {
-                $this->ajaxSuccess('内容模型不存在');
+                $this->ajaxFail('内容模型不存在');
             }
             $model_name = $model_result['dictionary_value'];
             $request_data = $baseLogic->getRequestData($model_name, 'model');
             $cmsPostModel = new CmsPostModel();
-            $result = $cmsPostModel->addRecord($request_data);
+            $result = $cmsPostModel->addModelRecord($request_data);
             if (!$result) {
                 $this->ajaxFail('文档添加失败,' . $this->getMessage());
             } else {
@@ -133,7 +133,6 @@ class CmsController extends UserBaseController
             }
             #获取表单初始化数据
             $form_init = $baseLogic->getFormInit($model_result['dictionary_value'], 'model');
-
             $all_category_result = $cmsCategoryModel->getAllRecord();
             $list = treeStructForLevel($all_category_result);
             foreach ($list as $value) {
@@ -144,11 +143,10 @@ class CmsController extends UserBaseController
             }
 
             #添加文档是默认数据
-            $form_data['category_id'] = $category_id;
             $form_data['model_id'] = $model_result['id'];
+            $form_data['category_id'] = $category_id;
             $form_data['post_id'] = getItemId();
-            Form::getInstance()->form_data($form_data)
-                ->form_schema($form_init);
+            Form::getInstance()->form_schema($form_init)->form_data($form_data);
             #面包屑导航
             $this->crumb(array(
                 '内容管理' => U('admin/Cms/index'),
@@ -175,8 +173,7 @@ class CmsController extends UserBaseController
             }
             $baseLogic = new BaseLogic();
             $request_data = $baseLogic->getRequestData($post_result['model_id'], 'model');
-            $request_data = Application::hooks()->apply_filters('publish_post', $request_data);
-            $result = $cmsPostModel->addRecord($request_data);
+            $result = $cmsPostModel->addModelRecord($request_data);
             if (!$result) {
                 $this->ajaxFail('文档添加失败,' . $this->getMessage());
             } else {
@@ -392,7 +389,7 @@ class CmsController extends UserBaseController
     protected function delPosts($id)
     {
         $model = new CmsPostModel();
-        return $model->deleteRecordById($id);
+        return $model->deleteModelRecord($id);
     }
 
     /**

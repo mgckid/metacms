@@ -40,9 +40,9 @@
             $.post('<?= U("admin/Cms/delPost") ?>', {id: id}, function (data) {
                 layer.alert(data.msg)
                 if (data.status == 1) {
-                    for (var i = 0; i < id.length; i++) {
-                        $('#article' + id[i]).remove();
-                    }
+                    setTimeout(function(){
+                        window.location.reload();
+                    },1000)
                 }
             }, 'json');
         }, function () {

@@ -1,17 +1,17 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/8/20
- * Time: 10:51
+ * User: CPR137
+ * Date: 2018/1/4
+ * Time: 14:16
  */
 
 namespace app\model;
 
 
-class CmsPostExtendAttributeModel extends BaseModel
+class CmsPostExtendTextModel extends BaseModel
 {
-    public $tableName = 'cms_post_extend_attribute';
+    public $tableName = 'cms_post_extend_text';
     public $pk = 'id';
 
     /**
@@ -50,5 +50,4 @@ class CmsPostExtendAttributeModel extends BaseModel
         }
         return $return ? $id : $return;
     }
-
-}
+} 

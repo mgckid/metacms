@@ -34,7 +34,7 @@ class BaseModel extends Model
     }
 
     /**
-     * 删除记录
+     * 添加记录
      * @access public
      * @author furong
      * @param $data
@@ -86,23 +86,6 @@ class BaseModel extends Model
         return $result;
     }
 
-    /**
-     * 删除单条记录
-     * @access public
-     * @author furong
-     * @param $id
-     * @return bool
-     * @since 2017年7月28日 09:46:43
-     * @abstract
-     */
-    public function deleteRecordById($id)
-    {
-        $data = [
-            $this->pk => $id,
-            'deleted' => 1
-        ];
-        return $this->addRecord($data);
-    }
 
     /**
      * 获取所有记录
@@ -171,6 +154,24 @@ class BaseModel extends Model
             $result = $result->as_array();
         }
         return $result;
+    }
+
+    /**
+     * 删除单条记录
+     * @access public
+     * @author furong
+     * @param $id
+     * @return bool
+     * @since 2017年7月28日 09:46:43
+     * @abstract
+     */
+    public function deleteRecordById($id)
+    {
+        $data = [
+            $this->pk => $id,
+            'deleted' => 1
+        ];
+        return $this->addRecord($data);
     }
 
     public function delRecord($orm)

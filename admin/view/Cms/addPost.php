@@ -30,7 +30,7 @@
                 if (data.status == 1) {
                     $('form[name=autoform]').find('input:reset').click();
                     setTimeout(function () {
-                          window.history.go(-1)
+                        window.history.go(-1)
                     }, 2000);
                 }
             }
