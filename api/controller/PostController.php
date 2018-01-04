@@ -305,7 +305,7 @@ class PostController extends BaseController
         $keyword = $request_param['keyword'];
         $p = intval($request_param['p']);
         $page_size = intval($request_param['page_size']);
-        $sql = "SELECT  post_id FROM cms_post WHERE `title` LIKE '%{$keyword}%' or  `keywords` LIKE '%{$keyword}%' or  `description` LIKE '%{$keyword}%' or  `post_tag` LIKE '%{$keyword}%' GROUP by post_id UNION  SELECT  post_id FROM cms_post_extend_attribute WHERE `value` LIKE '%{$keyword}%' GROUP by post_id UNION SELECT  post_id FROM cms_post_extend_text WHERE `value` LIKE '%{$keyword}%'  GROUP by post_id ";
+        $sql = "SELECT  post_id FROM cms_post WHERE (`title` LIKE '%{$keyword}%' or  `keywords` LIKE '%{$keyword}%' or  `description` LIKE '%{$keyword}%' or  `post_tag` LIKE '%{$keyword}%' ) and deleted = 0 GROUP by post_id UNION  SELECT  post_id FROM cms_post_extend_attribute WHERE `value` LIKE '%{$keyword}%' and deleted = 0 GROUP by post_id UNION SELECT  post_id FROM cms_post_extend_text WHERE `value` LIKE '%{$keyword}%' and deleted = 0  GROUP by post_id ";
         $result = $cmsPostModel->orm()->raw_query($sql)->find_array();
         if (!$result) {
             $this->response(null, self::S200_OK, '没有搜索到数据');
