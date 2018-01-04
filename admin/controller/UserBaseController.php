@@ -25,13 +25,13 @@ class UserBaseController extends BaseController
 
         parent::__construct();
         $this->checkLogin();
-//        if (!$this->checkPower()) {
-//            if (IS_POST || IS_AJAX) {
-//                $this->ajaxFail('没有权限');
-//            } else {
-//                trigger_error('没有权限');
-//            }
-//        };
+        if (!$this->checkPower()) {
+            if (IS_POST || IS_AJAX) {
+                $this->ajaxFail('没有权限');
+            } else {
+                trigger_error('没有权限');
+            }
+        };
     }
 
     /**
@@ -124,8 +124,8 @@ class UserBaseController extends BaseController
         $model = new \app\model\AdminUserModel();
         $roleInfo = $this->getInfo('loginInfo')['roleInfo'];
         $list = $model->for_table('admin_access')
-            ->select_expr('ac.*')
             ->table_alias('ac')
+            ->select_expr('ac.*')
             ->left_join('admin_role_access', array('arc.access_sn', '=', 'ac.access_sn'), 'arc')
             ->where_in('arc.role_id', $roleInfo)
             ->where_in('ac.level', [1, 2])

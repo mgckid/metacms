@@ -44,6 +44,11 @@
         },
         success: function (data) {
             layer.alert(data.msg);
+            if(data.status==1){
+                setTimeout(function () {
+                    window.history.go(-1)
+                }, 2000);
+            }
         }
     });
 </script>

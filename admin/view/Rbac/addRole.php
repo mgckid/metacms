@@ -27,9 +27,11 @@
             },
             success: function (data) {
                 layer.alert(data.msg)
-                setTimeout(function () {
-                    window.history.go(-1)
-                }, 2000);
+                if(data.status==1){
+                    setTimeout(function () {
+                        window.history.go(-1)
+                    }, 2000);
+                }
             }
         });
     })

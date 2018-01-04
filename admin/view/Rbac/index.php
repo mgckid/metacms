@@ -21,7 +21,7 @@
                             <td><?=$v[$key]?></td>
                         <?php endforeach;?>
                         <td>
-                            <a  href="<?= U('admin/Rbac/addUser', array('id' => $v['id'])) ?>" data-power="admin/Rbac/addUser" class="btn btn-xs btn-danger">编辑</a>
+                            <a  href="<?= U('admin/Rbac/editUser', array('id' => $v['id'])) ?>" data-power="admin/Rbac/editUser" class="btn btn-xs btn-danger">编辑</a>
                          <a href="<?= U('admin/Rbac/addUserRole', array('id' => $v['id'])) ?>"  data-power="admin/Rbac/addUserRole" class="btn btn-xs btn-success">分配角色</a>
                           <a href="<?= U('admin/Rbac/resetPassword', array('id' => $v['id'])) ?>" data-power="admin/Rbac/resetPassword" class="btn btn-xs btn-primary">重置密码</a>
                             <button name="delUser" data-power="admin/Rbac/delUser" user_id="<?= $v['id'] ?>" class="btn btn-danger btn-xs">删除用户</button>

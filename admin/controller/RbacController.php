@@ -34,8 +34,8 @@ class RbacController extends UserBaseController
             $logic = new BaseLogic();
             $request_data = $logic->getRequestData('admin_role', 'table');
             $request_data['role_id'] = uuid();
-            $count = $model->orm()->where(['role_name'=>$request_data['role_name'],'deleted'=>0])->count();
-            if($count){
+            $count = $model->orm()->where(['role_name' => $request_data['role_name'], 'deleted' => 0])->count();
+            if ($count) {
                 $this->ajaxFail('角色名已存在');
             }
             $result = $model->addRecord($request_data);
@@ -69,9 +69,11 @@ class RbacController extends UserBaseController
             $model = new AdminRoleModel();
             $logic = new BaseLogic();
             $request_data = $logic->getRequestData('admin_role', 'table');
-            $request_data['role_id'] = uuid();
-            $count = $model->orm()->where(['role_name'=>$request_data['role_name'],'deleted'=>0])->count();
-            if($count){
+            $count = $model->orm()
+                ->where(['role_name' => $request_data['role_name'], 'deleted' => 0,])
+                ->where_not_equal('id', $request_data['id'])
+                ->count();
+            if ($count) {
                 $this->ajaxFail('角色名已存在');
             }
             $result = $model->addRecord($request_data);
@@ -81,11 +83,14 @@ class RbacController extends UserBaseController
                 $this->ajaxSuccess('添加成功');
             }
         } else {
+            $id = $_GET['id'];
+            $roleModel = new AdminRoleModel();
+            $result = $roleModel->getRecordInfoById($id);
             #获取表单数据
             $dictionaryLogic = new BaseLogic();
             $form_init = $dictionaryLogic->getFormInit('admin_role', 'table');
 
-            Form::getInstance()->form_schema($form_init);
+            Form::getInstance()->form_schema($form_init)->form_data($result);
             #面包屑导航
             $this->crumb(array(
                 '权限管理' => U('admin/Rbac/index'),
@@ -110,52 +115,54 @@ class RbacController extends UserBaseController
             if (!$role) {
                 $this->ajaxFail('请选择角色');
             }
-            $userAdminRoleModel = new AdminUserRoleModel();
+            $userRoleModel = new AdminUserRoleModel();
             $userModel = new AdminUserModel();
             $userInfo = $userModel->getUserInfo($userName);
             if (empty($userInfo)) {
                 $this->ajaxFail('用户不存在');
             }
             #获取用户角色；
-            $roleList = $userAdminRoleModel->getRoleByUserId($userInfo['user_id']);
+            $orm = $userRoleModel->orm()->where('user_id',$userInfo['user_id']);
+            $result = $userRoleModel->getAllRecord($orm);
+            $roleList = array_column($result,'role_id');
             #添加的角色
             $addRole = array_diff($role, $roleList);
             #删除的角色
             $delRole = array_diff($roleList, $role);
-            $userAdminRoleModel->beginTransaction();
+            $userRoleModel->beginTransaction();
             try {
-                $count = 0;
                 #添加角色
                 if ($addRole) {
                     foreach ($addRole as $value) {
                         $data = array(
                             'user_id' => $userInfo['user_id'],
                             'role_id' => $value,
-                            'created' => date('Y-m-d H:i:s', time()),
-                            'modified' => date('Y-m-d H:i:s', time()),
                         );
-                        $obj = $userAdminRoleModel->orm()->create($data);
-                        if ($obj->save()) {
-                            $count++;
+                        $result = $userRoleModel->addRecord($data);
+                        if (!$result) {
+                            throw new \Exception('添加用户角色关联记录失败');
                         }
-                    }
-                    if (count($addRole) != $count) {
-                        throw new \Exception('添加用户角色关联记录失败');
                     }
                 }
                 #删除角色
                 if ($delRole) {
-                    $result = $userAdminRoleModel->orm()
-                        ->where(array('user_id' => $userInfo['user_id']))
-                        ->where_in('role_id', $delRole)
-                        ->delete_many();
-                    if (!$result) {
-                        throw new \Exception('删除角色权限失败');
+                    foreach ($delRole as $value) {
+                        $data = $userRoleModel->orm()
+                            ->where('user_id',$userInfo['user_id'])
+                            ->where('role_id',$value)
+                            ->where('deleted',0)
+                            ->find_one()
+                            ->as_array();
+                        $data['deleted'] = 1;
+                        $result = $userRoleModel->addRecord($data);
+                        if (!$result) {
+                            throw new \Exception('删除角色权限失败');
+                        }
                     }
                 }
-                $userAdminRoleModel->commit();
+                $userRoleModel->commit();
             } catch (\Exception $ex) {
-                $userAdminRoleModel->rollBack();
+                $userRoleModel->rollBack();
                 $this->ajaxFail($ex->getMessage());
             }
             $this->ajaxSuccess('添加用户角色关联记录成功');
@@ -163,9 +170,9 @@ class RbacController extends UserBaseController
             $roleModel = new AdminRoleModel();
             $userModel = new AdminUserModel();
             #获取用户列表
-            $userList = $userModel->getAllRecord('','id,username,true_name');
+            $userList = $userModel->getAllRecord('', 'id,username,true_name');
             #获取角色列表
-            $roleList = $roleModel->getAllRecord('','role_id,role_name');
+            $roleList = $roleModel->getAllRecord('', 'role_id,role_name');
             $data = array(
                 'user' => $userList,
                 'role' => $roleList
@@ -207,6 +214,40 @@ class RbacController extends UserBaseController
             $this->crumb(array(
                 '权限管理' => U('admin/Rbac/Index'),
                 '添加用户' => ''
+            ));
+            $this->display('Rbac/addUser');
+        }
+    }
+
+    /**
+     * 修改用户
+     * @privilege 修改用户|Admin/Rbac/editUser|b57b34f0-f0f1-11e7-83c7-00163e003500|3
+     */
+    public function editUser()
+    {
+        if (IS_POST) {
+            $dictionaryLogic = new BaseLogic();
+            $request_data = $dictionaryLogic->getRequestData('admin_user', 'table');
+            $adminAdminUserModel = new AdminUserModel();
+            $result = $adminAdminUserModel->addRecord($request_data);
+            if ($result) {
+                $this->ajaxSuccess('用户修改成功');
+            } else {
+                $this->ajaxFail('用户修改失败');
+            }
+        } else {
+            #表单初始化数据
+            $id = $_GET['id'];
+            $dictionaryLogic = new BaseLogic();
+            $userModel = new AdminUserModel();
+            $form_init = $dictionaryLogic->getFormInit('admin_user', 'table');
+            unset($form_init['password']);
+            $result = $userModel->getRecordInfoById($id);
+            Form::getInstance()->form_schema($form_init)->form_data($result);
+            #面包屑导航
+            $this->crumb(array(
+                '权限管理' => U('admin/Rbac/Index'),
+                '修改用户' => ''
             ));
             $this->display('Rbac/addUser');
         }
@@ -340,9 +381,9 @@ class RbacController extends UserBaseController
             $access = isset($_POST['access_sn']) ? $_POST['access_sn'] : array();
 
             #获取角色权限
-            $orm = $roleAccessModel->orm()->where('role_id',$roleId);
-            $count = $roleAccessModel->getRecordList($orm,'','',true);
-            $result = $roleAccessModel->getRecordList($orm,0,$count);
+            $orm = $roleAccessModel->orm()->where('role_id', $roleId);
+            $count = $roleAccessModel->getRecordList($orm, '', '', true);
+            $result = $roleAccessModel->getRecordList($orm, 0, $count);
             $userAccess = array_column($result, 'access_sn');
             #新添加权限
             $addCccess = array_diff($access, $userAccess);
@@ -360,7 +401,7 @@ class RbacController extends UserBaseController
                             'role_id' => $roleId,
                             'access_sn' => $value,
                         );
-                        $result=  $roleAccessModel->addRecord($data);
+                        $result = $roleAccessModel->addRecord($data);
                         if (!$result) {
                             throw new \Exception('添加角色权限关联记录失败');
                         }
@@ -423,9 +464,9 @@ class RbacController extends UserBaseController
         $list_init = $dictionaryLogic->getListInit('admin_role');
 
         $roleModel = new AdminRoleModel();
-        $count = $roleModel->getRecordList('', '','', true);
+        $count = $roleModel->getRecordList('', '', '', true);
         $page = new Page($count, $p, $pageSize, false);
-        $roleList = $roleModel->getRecordList('',$page->getOffset(), $pageSize, false,'id','asc');
+        $roleList = $roleModel->getRecordList('', $page->getOffset(), $pageSize, false, 'id', 'asc');
         $data = array(
             'list' => $roleList,
             'pages' => $page->getPageStruct(),
@@ -479,12 +520,12 @@ class RbacController extends UserBaseController
         $p = isset($_GET['p']) ? intval($_GET['p']) : 1;
         $pageSize = 10;
         $userModel = new AdminUserModel();
-        $count = $userModel->getRecordList('','', '', true);
+        $count = $userModel->getRecordList('', '', '', true);
         $page = new Page($count, $p, $pageSize);
-        $list = $userModel->getRecordList('',$page->getOffset(), $pageSize);
+        $list = $userModel->getRecordList('', $page->getOffset(), $pageSize);
         #获取列表字段
         $dictionarylogic = new BaseLogic();
-        $list_init = $dictionarylogic->getListInit('admin_user','table');
+        $list_init = $dictionarylogic->getListInit('admin_user', 'table');
 
 
         $data = array(
@@ -523,7 +564,7 @@ class RbacController extends UserBaseController
         }
         $roleId = isset($_POST['role_id']) ? trim($_POST['role_id']) : '';
 
-        $orm = $RoleAccessModel->orm()->where('role_id',$roleId);
+        $orm = $RoleAccessModel->orm()->where('role_id', $roleId);
         $result = $RoleAccessModel->getAllRecord($orm);
         if (!$result) {
             $this->ajaxFail('该角色还没分配权限');
@@ -621,7 +662,7 @@ class RbacController extends UserBaseController
         $power = isset($_POST['power']) ? $_POST['power'] : array();
         $return = array();
         foreach ($power as $v) {
-            $return[$v] = true;//$this->checkPower($v);
+            $return[$v] =  $this->checkPower($v);
         }
         $this->ajaxSuccess('获取成功', $return);
     }
@@ -685,7 +726,7 @@ class RbacController extends UserBaseController
             #面包屑导航
             $this->crumb(array(
                 '权限管理' => U('admin/Rbac/index'),
-                '修改密码' => ''
+                '重置密码' => ''
             ));
             $this->display('Rbac/resetPassword', $data);
         }
@@ -715,12 +756,12 @@ class RbacController extends UserBaseController
         #获取参数
         $username = isset($_POST['username']) ? trim($_POST['username']) : '';
 
-        $userAdminRoleModel = new AdminUserRoleModel();
+        $userRoleModel = new AdminUserRoleModel();
         $userInfo = $userModel->getUserInfo($username);
         if (empty($userInfo)) {
             $this->ajaxFail('用户不存在');
         }
-        $roleList = $userAdminRoleModel->getRoleByUserId($userInfo['user_id']);
+        $roleList = $userRoleModel->getRoleByUserId($userInfo['user_id']);
         if (empty($roleList)) {
             $this->ajaxFail('该用户没有分配角色');
         } else {
