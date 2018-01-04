@@ -38,8 +38,7 @@ class CmsPostModel extends BaseModel
             ->find_one();
         $result = [];
         if ($next_result) {
-            $next_result = $next_result->as_array();
-            $result = $this->getModelRecordInfoByPostId($next_result['post_id'], $field);
+            $result = $next_result->as_array();
         }
         return $result;
     }
@@ -62,8 +61,7 @@ class CmsPostModel extends BaseModel
             ->find_one();
         $result = [];
         if ($pre_result) {
-            $pre_result = $pre_result->as_array();
-            $result = $this->getModelRecordInfoByPostId($pre_result['post_id'], $field);
+            $result = $pre_result->as_array();
         }
         return $result;
     }
@@ -145,7 +143,8 @@ class CmsPostModel extends BaseModel
 
         $orm = $this->orm()->raw_join($cms_post_extend_attribute_raw_join, ['cms_post.post_id', '=', 'cms_post_extend_attribute.post_id'], 'cms_post_extend_attribute')
             ->raw_join($cms_post_extend_text_raw_join, ['cms_post.post_id', '=', 'cms_post_extend_text.post_id'], 'cms_post_extend_text')
-            ->where('cms_post.post_id', $post_id);
+            ->where('cms_post.post_id', $post_id)
+            ->where('cms_post.deleted', 0);
         $result = $orm->select_expr($field)->find_one();
         if (!empty($result)) {
             $result = $result->as_array();
