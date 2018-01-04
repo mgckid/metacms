@@ -356,9 +356,9 @@ class CmsController extends UserBaseController
 
     /**
      * 删除文章
-     * @privilege 删除文章|Admin/Cms/delArticle|c6a7aa7b-2008-11e7-8ad5-9cb3ab404081|3
+     * @privilege 删除文章|Admin/Cms/delPost|c6a7aa7b-2008-11e7-8ad5-9cb3ab404081|3
      */
-    public function delArticle()
+    public function delPost()
     {
         if (IS_POST) {
             $model = new BaseModel();
@@ -378,7 +378,7 @@ class CmsController extends UserBaseController
 
             $success = 0;
             foreach ($id as $v) {
-                if ($this->delArticles($v)) {
+                if ($this->delPosts($v)) {
                     $success++;
                 }
             }
@@ -389,7 +389,7 @@ class CmsController extends UserBaseController
         }
     }
 
-    protected function delArticles($id)
+    protected function delPosts($id)
     {
         $model = new CmsPostModel();
         return $model->deleteRecordById($id);

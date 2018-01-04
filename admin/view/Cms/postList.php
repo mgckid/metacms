@@ -17,7 +17,7 @@
                             <?php endforeach;?>
                             <td>
                                 <a class="btn btn-success btn-xs"  href="<?= U('admin/Cms/editPost', array('id' => $value['id'])) ?>" data-power="admin/Cms/editPost">编辑</a>
-                                <a class="btn btn-danger ml10 btn-xs" href="javascript:void(0)" onclick="delArticle(<?= $value['id'] ?>)" data-power="admin/Cms/delArticle">删除</a>
+                                <a class="btn btn-danger ml10 btn-xs" href="javascript:void(0)" onclick="delPost(<?= $value['id'] ?>)" data-power="admin/Cms/delPost">删除</a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -30,14 +30,14 @@
         </div>
 <script>
     //删除文章
-    function delArticle(id) {
+    function delPost(id) {
         if ('number' == typeof (id)) {
             id = [id];
         }
         layer.confirm('您确定要删除选中的文章么？', {
             btn: ['确定', '取消'] //按钮
         }, function () {
-            $.post('<?= U("admin/Cms/delArticle") ?>', {id: id}, function (data) {
+            $.post('<?= U("admin/Cms/delPost") ?>', {id: id}, function (data) {
                 layer.alert(data.msg)
                 if (data.status == 1) {
                     for (var i = 0; i < id.length; i++) {
@@ -53,7 +53,7 @@
      * 批量删除文章
      * @returns {undefined}
      */
-    function delArticles() {
+    function delPosts() {
         var id = []
         $('table input:checkbox').each(function () {
             var isChecked = $(this).is(function () {
@@ -64,7 +64,7 @@
             }
         });
         if (id.length != 0) {
-            delArticle(id);
+            delPost(id);
         } else {
             layer.alert('请选择要删除的文章')
         }

@@ -55,7 +55,7 @@ INSERT INTO `admin_access` VALUES ('1367', '1363', 'e91d2442-2006-11e7-8ad5-9kjh
 INSERT INTO `admin_access` VALUES ('1368', '1363', 'e91d2442-2006-11e7-8ad5-9cb3ab404081', '栏目列表', 'Admin', 'Cms', 'index', '2', '100', '0', '2017-12-21 23:30:25', '2017-12-21 23:30:25');
 INSERT INTO `admin_access` VALUES ('1369', '1363', 'e92a1a4e-2006-11e7-8ad5-9cb3ab404081', '删除目录', 'Admin', 'Cms', 'delCategory', '3', '100', '0', '2017-12-21 23:30:25', '2017-12-21 23:30:25');
 INSERT INTO `admin_access` VALUES ('1370', '1363', 'c091f245-768b-11e7-ba80-5996e3b2d0fb', '文档列表', 'Admin', 'Cms', 'postList', '3', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:25');
-INSERT INTO `admin_access` VALUES ('1371', '1363', 'c6a7aa7b-2008-11e7-8ad5-9cb3ab404081', '删除文章', 'Admin', 'Cms', 'delArticle', '3', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:26');
+INSERT INTO `admin_access` VALUES ('1371', '1363', 'c6a7aa7b-2008-11e7-8ad5-9cb3ab404081', '删除文章', 'Admin', 'Cms', 'delPost', '3', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:26');
 INSERT INTO `admin_access` VALUES ('1372', '0', 'bd1327d8-6bc1-11e7-ab90-e03f49a02407', '内容模型', 'Admin', 'CmsModel', '', '1', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:26');
 INSERT INTO `admin_access` VALUES ('1373', '1372', '8a7c80a9-6c2c-11e7-ba80-5996e3b2d0fb', '模型管理', 'Admin', 'CmsModel', 'modelManage', '2', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:26');
 INSERT INTO `admin_access` VALUES ('1374', '1372', '986d8a01-6c2c-11e7-ba80-5996e3b2d0fb', '字段管理', 'Admin', 'CmsModel', 'fieldManage', '3', '100', '0', '2017-12-21 23:30:26', '2017-12-21 23:30:26');
