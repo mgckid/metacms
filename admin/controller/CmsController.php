@@ -16,7 +16,7 @@ use app\model\CoreTextModel;
 use app\model\DictionaryModelModel;
 use metacms\base\Application;
 use metacms\base\BosonNLP;
-use metacms\base\Hook;
+use metacms\base\Hooks;
 use metacms\web\Form;
 use metacms\base\Page;
 use Overtrue\Pinyin\Pinyin;

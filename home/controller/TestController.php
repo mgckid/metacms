@@ -10,7 +10,7 @@ namespace app\controller;
 
 
 use metacms\base\Dex3;
-use metacms\base\Hook;
+use metacms\base\Hooks;
 
 class TestController extends BaseController
 {
