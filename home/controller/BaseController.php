@@ -11,7 +11,7 @@ namespace app\controller;
 
 use app\model\SiteSetModel;
 use Curl\Curl;
-use metacms\base\Dex3;
+use metacms\base\Des3;
 use metacms\web\Controller;
 use metacms\web\View;
 use metacms\base\Application;
@@ -97,8 +97,9 @@ class BaseController extends Controller
             trigger_error('接口地址不存在');
         }
         #生产环境接口加密
-        if (C('API_ENCRYPTION')) {
-            $dex3 = new Dex3();
+        $key = C('API_ENCRYPTION_KEY');
+        if ($key) {
+            $dex3 = new Des3($key);
             $encode_data = base64_encode($dex3->encrypt(json_encode($data)));
             $data = [
                 'param' => $encode_data

@@ -30,8 +30,8 @@ if (ENVIRONMENT == 'develop') {
         ],
         /*接口代理设置*/
         //'CURLOPT_PROXY' => '127.0.0.1:7777',
-        /*接口加密是否开启*/
-        'API_ENCRYPTION' => 0,
+        /*接口加密key*/
+        'API_ENCRYPTION_KEY' => '',
         /*数据缓存是否开启*/
         'CACHE_OPEN' => 0,
     ];
@@ -64,8 +64,8 @@ if (ENVIRONMENT == 'develop') {
                 'return_result_sets' => false
             ),
         ],
-        /*接口加密是否开启*/
-        'API_ENCRYPTION' => 0,
+        /*接口加密key*/
+        'API_ENCRYPTION_KEY' => '',
         /*数据缓存是否开启*/
         'CACHE_OPEN' => 0,
     ];
