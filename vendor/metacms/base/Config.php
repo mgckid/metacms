@@ -28,8 +28,7 @@ class Config extends \Noodlehaus\Config
             },
             /*验证器组件依赖注入*/
             'validation' => function ($c) {
-                require VENDOR_PATH . '/overtrue/validation/src/helpers.php';
-                $lang = require VENDOR_PATH . '/overtrue/zh-CN/validation.php';
+                $lang = require FRAMEWORK_PATH . '/vendor/overtrue/zh-CN/validation.php';
                 return new \Overtrue\Validation\Factory(new \Overtrue\Validation\Translator($lang));
             },
             /*缓存组件依赖注入*/

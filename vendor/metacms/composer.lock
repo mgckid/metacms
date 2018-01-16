@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a31a64a39b6c869d1a817847a7c083d",
+    "content-hash": "97d775793352bd7ceb1653eaaf2086b9",
     "packages": [
         {
             "name": "aura/autoload",
@@ -54,6 +54,45 @@
                 "class loader"
             ],
             "time": "2016-10-03T19:36:19+00:00"
+        },
+        {
+            "name": "crazycodr/standard-exceptions",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crazycodr/standard-exceptions.git",
+                "reference": "76b718b09ac7c2e77458ccef531bc273849adf06"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/crazycodr/standard-exceptions/76b718b09ac7c2e77458ccef531bc273849adf06.zip",
+                "reference": "76b718b09ac7c2e77458ccef531bc273849adf06",
+                "shasum": ""
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.*",
+                "phpunit/phpunit": "5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Exceptions\\": "Exceptions/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Dumoulin aka crazycodr",
+                    "email": "thecrazycodr@gmail.com",
+                    "homepage": "http://www.crazycoders.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This project is aimed at providing additional standard exceptions to php. Many exceptions that are missing from the SPL are constantly being reproduced in different projects. By providing a package of high-quality, well organised exceptions, it will, in the long run, increase interroperability between projects.",
+            "time": "2017-06-19T13:19:17+00:00"
         },
         {
             "name": "hassankhan/config",
@@ -166,6 +205,48 @@
                 "views"
             ],
             "time": "2016-12-28T00:14:17+00:00"
+        },
+        {
+            "name": "overtrue/validation",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/validation.git",
+                "reference": "c1068fec17dda4a1babca7b4bb9c555c0f304e3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/overtrue/validation/c1068fec17dda4a1babca7b4bb9c555c0f304e3b.zip",
+                "reference": "c1068fec17dda4a1babca7b4bb9c555c0f304e3b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\Validation\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carlos",
+                    "email": "anzhengchao@gmail.com"
+                }
+            ],
+            "description": "Laralve Validation 简化无依赖版",
+            "time": "2016-11-10T07:30:39+00:00"
         },
         {
             "name": "pimple/pimple",

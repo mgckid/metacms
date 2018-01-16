@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit00dd36d931c9a0c0964a3ba2ea69276a
 {
+    public static $files = array (
+        'ee2eba616b1493b62ef61c9c04a94bc1' => __DIR__ . '/..' . '/overtrue/validation/src/helpers.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'i' => 
         array (
@@ -15,6 +19,10 @@ class ComposerStaticInit00dd36d931c9a0c0964a3ba2ea69276a
         array (
             'Psr\\Container\\' => 14,
         ),
+        'O' => 
+        array (
+            'Overtrue\\Validation\\' => 20,
+        ),
         'N' => 
         array (
             'Noodlehaus\\' => 11,
@@ -22,6 +30,10 @@ class ComposerStaticInit00dd36d931c9a0c0964a3ba2ea69276a
         'L' => 
         array (
             'League\\Plates\\' => 14,
+        ),
+        'E' => 
+        array (
+            'Exceptions\\' => 11,
         ),
         'A' => 
         array (
@@ -38,6 +50,10 @@ class ComposerStaticInit00dd36d931c9a0c0964a3ba2ea69276a
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Overtrue\\Validation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/overtrue/validation/src',
+        ),
         'Noodlehaus\\' => 
         array (
             0 => __DIR__ . '/..' . '/hassankhan/config/src',
@@ -45,6 +61,10 @@ class ComposerStaticInit00dd36d931c9a0c0964a3ba2ea69276a
         'League\\Plates\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/plates/src',
+        ),
+        'Exceptions\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/crazycodr/standard-exceptions/Exceptions',
         ),
         'Aura\\Autoload\\' => 
         array (
