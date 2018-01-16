@@ -28,6 +28,7 @@ defined('HTTP_HOST') or define('HTTP_HOST', $_SERVER['HTTP_HOST']);
 
 #载入函数库
 require __DIR__ . '/function.php';
+require __DIR__ . '/vendor/autoload.php';
 
 #错误处理设置
 {
@@ -45,11 +46,10 @@ require __DIR__ . '/function.php';
 }
 
 try {
-    require VENDOR_PATH . '/Aura.Autoload-2.x/src/Loader.php';
     #自动加载设置
     $loader = new \Aura\Autoload\Loader();
     $loader->register();
-    $loader->setPrefixes(require(VENDOR_PATH . '/class_map.php'));
+    $loader->setPrefixes(require(__DIR__ . '/class_map.php'));
     #初始化钩子
     $hooks = new  \metacms\base\Hooks();
     #初始化配置
