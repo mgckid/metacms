@@ -53,7 +53,7 @@ class testController extends UserBaseController
             ];
             $tags = $cmsPostModel->for_table('cms_post_tag', 'pro')->table_alias('pt')
                 ->select_expr('pt.post_id,GROUP_CONCAT(t.tag_name) AS tags')
-                ->left_join('cms_tag', ['pt.tag_id', '=', 't.tag_id'], 't')
+                ->left_outer_join('cms_tag', ['pt.tag_id', '=', 't.tag_id'], 't')
                 ->where('pt.post_id', $value['id'])
                 ->group_by_expr('pt.post_id')
                 ->find_one();

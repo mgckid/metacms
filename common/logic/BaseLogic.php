@@ -62,7 +62,7 @@ class BaseLogic extends Controller
     {
         $model = new DictionaryTableModel();
         $field_result = $model->orm()->table_alias('m')
-            ->left_join('dictionary_table_field', ['m.id', '=', 'f.dictionary_id'], 'f')
+            ->left_outer_join('dictionary_table_field', ['m.id', '=', 'f.dictionary_id'], 'f')
             ->select_expr('f.*')
             ->where('m.dictionary_value', $table_name)
             ->where('m.deleted', 0)
@@ -100,7 +100,7 @@ class BaseLogic extends Controller
         $model_name = array_column($pmodel, 'dictionary_value');
         $model = new DictionaryModelModel();
         $field_result = $model->orm()->table_alias('m')
-            ->left_join('dictionary_model_field', ['m.id', '=', 'f.dictionary_id'], 'f')
+            ->left_outer_join('dictionary_model_field', ['m.id', '=', 'f.dictionary_id'], 'f')
             ->select_expr('f.*')
             ->where_in('m.dictionary_value', $model_name)
             ->where('m.deleted', 0)

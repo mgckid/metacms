@@ -220,7 +220,7 @@ class PostController extends BaseController
             $this->response(null, self::S400_BAD_REQUEST, $validate->messages()->first());
         }
         $category_id = isset($request_param['category_id']) && !empty($request_param['category_id']) ? intval($request_param['category_id']) : 0;
-        $orm = $cmsCategoryModel->orm()->table_alias('c')->right_join('dictionary_model', ['c.model_id', '=', 'm.id'], 'm')->where(['c.id' => $category_id]);
+        $orm = $cmsCategoryModel->orm()->table_alias('c')->right_outer_join('dictionary_model', ['c.model_id', '=', 'm.id'], 'm')->where(['c.id' => $category_id]);
         $field = 'c.*,m.dictionary_value';
         $category_result = $cmsCategoryModel->getRecordInfo($orm, $field);
         #获取栏目下文档

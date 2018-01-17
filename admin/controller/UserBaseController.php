@@ -126,7 +126,7 @@ class UserBaseController extends BaseController
         $list = $model->for_table('admin_access')
             ->table_alias('ac')
             ->select_expr('ac.*')
-            ->left_join('admin_role_access', array('arc.access_sn', '=', 'ac.access_sn'), 'arc')
+            ->left_outer_join('admin_role_access', array('arc.access_sn', '=', 'ac.access_sn'), 'arc')
             ->where_in('arc.role_id', $roleInfo)
             ->where_in('ac.level', [1, 2])
             ->find_array();

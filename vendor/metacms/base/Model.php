@@ -174,7 +174,7 @@ class Model
      * @access public
      * @author furong
      * @param string $db_name
-     * @return ORM
+     * @return \ORM
      * @since 2017年6月20日 11:38:23
      * @abstract
      * @throws \Exception
