@@ -28,7 +28,7 @@ defined('HTTP_HOST') or define('HTTP_HOST', $_SERVER['HTTP_HOST']);
 
 #载入函数库
 require __DIR__ . '/function.php';
-require __DIR__ . '/vendor/autoload.php';
+require VENDOR_PATH . '/autoload.php';
 
 #错误处理设置
 {
