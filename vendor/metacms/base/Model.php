@@ -10,7 +10,6 @@ namespace metacms\base;
 
 
 use Exceptions\Http\Server\InternalServerErrorException;
-use idiorm\orm\ORM;
 use Overtrue\Validation\Factory;
 
 class Model
@@ -41,9 +40,9 @@ class Model
         if (!array_key_exists($dbName, $config)) {
             throw new InternalServerErrorException($dbName . '数据库配置不存在');
         }
-        if (!in_array($dbName, ORM::get_connection_names())) {
+        if (!in_array($dbName, \ORM::get_connection_names())) {
             $dbConfig = $config[$dbName];
-            ORM::configure($dbConfig, NULL, $dbName);
+            \ORM::configure($dbConfig, NULL, $dbName);
         }
         return $dbName;
     }
@@ -60,7 +59,7 @@ class Model
      */
     public function for_table($table_name, $db_name = 'default')
     {
-        return ORM::for_table($table_name, self::selectDb($db_name));
+        return \ORM::for_table($table_name, self::selectDb($db_name));
     }
 
     /**
@@ -74,7 +73,7 @@ class Model
      */
     public function get_db($db_name = 'default')
     {
-        return ORM::get_db(self::selectDb($db_name));
+        return \ORM::get_db(self::selectDb($db_name));
     }
 
     /**
@@ -132,7 +131,7 @@ class Model
      */
     public function raw_execute($query, $parameters = array(), $db_name = 'default')
     {
-        return ORM::raw_execute($query, $parameters = array(), self::selectDb($db_name));
+        return \ORM::raw_execute($query, $parameters = array(), self::selectDb($db_name));
     }
 
     /**
@@ -147,12 +146,12 @@ class Model
      */
     public function get_last_query($db_name = 'default')
     {
-        return ORM::get_last_query(self::selectDb($db_name));
+        return \ORM::get_last_query(self::selectDb($db_name));
     }
 
     public function get_query_log($db_name = 'default')
     {
-        return ORM::get_query_log(self::selectDb($db_name));
+        return \ORM::get_query_log(self::selectDb($db_name));
     }
 
     /**

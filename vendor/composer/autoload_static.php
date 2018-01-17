@@ -11,10 +11,6 @@ class ComposerStaticInit64bad77e4bd315b839fe918e1034887a
     );
 
     public static $prefixLengthsPsr4 = array (
-        'i' => 
-        array (
-            'idiorm\\orm\\' => 11,
-        ),
         'P' => 
         array (
             'Psr\\Container\\' => 14,
@@ -42,10 +38,6 @@ class ComposerStaticInit64bad77e4bd315b839fe918e1034887a
     );
 
     public static $prefixDirsPsr4 = array (
-        'idiorm\\orm\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/voku/idiorm/src/idiorm/orm',
-        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -82,12 +74,21 @@ class ComposerStaticInit64bad77e4bd315b839fe918e1034887a
         ),
     );
 
+    public static $classMap = array (
+        'IdiormMethodMissingException' => __DIR__ . '/..' . '/j4mie/idiorm/idiorm.php',
+        'IdiormResultSet' => __DIR__ . '/..' . '/j4mie/idiorm/idiorm.php',
+        'IdiormString' => __DIR__ . '/..' . '/j4mie/idiorm/idiorm.php',
+        'IdiormStringException' => __DIR__ . '/..' . '/j4mie/idiorm/idiorm.php',
+        'ORM' => __DIR__ . '/..' . '/j4mie/idiorm/idiorm.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit64bad77e4bd315b839fe918e1034887a::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit64bad77e4bd315b839fe918e1034887a::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit64bad77e4bd315b839fe918e1034887a::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit64bad77e4bd315b839fe918e1034887a::$classMap;
 
         }, null, ClassLoader::class);
     }
