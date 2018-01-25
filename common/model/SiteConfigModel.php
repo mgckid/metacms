@@ -61,7 +61,7 @@ class SiteConfigModel extends BaseModel
         return $return;
     }
 
-    public function getConfigList($condition = [], $field = '*')
+    public function getConfigList($orm='', $field = '*')
     {
         $orm = $this->orm()->where('deleted', 0);
         return $orm->select_expr($field)->find_array();
