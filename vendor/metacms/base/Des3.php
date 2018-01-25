@@ -1,6 +1,6 @@
 <?php
 /**
- * 基于openssl的加密解密方法
+ * 基于openssl的加密解密方法(兼容Mcrypt加密)
  * Created by PhpStorm.
  * User: furong
  * Date: 2018/1/5
@@ -17,18 +17,16 @@ class Des3
     const AES_128_CBC = 'AES-128-CBC';
 
     #加密密钥
-    protected $key;
+    protected $key = array("my.oschina.net/penngo?#@");
     #加密向量
-    protected $iv = '01234567012345678';
+    protected $iv = '0123456701234567';
 
-    function __construct($key, $iv = '')
+    function __construct($key = '', $iv = '')
     {
-        if (!$key) {
-            throw new \Exception('请设置加密key');
-            return false;
+        if (!empty($key)) {
+            $this->key = is_string($key) ? array($key) : $key;
         }
-        $this->key = $key;
-        if ($iv) {
+        if (!empty($iv)) {
             $this->iv = $iv;
         }
     }
@@ -44,10 +42,12 @@ class Des3
      * @abstract
      * @throws \Exception
      */
-    public function encrypt(string $data, string $method = self::DES_EDE3_CBC)
+    public function encrypt($data, $method = self::DES_EDE3_CBC)
     {
+
+        $key = str_pad($this->key[0], 24, '0');
         $iv = $this->getIv($method);
-        $result = openssl_encrypt($data, $method, $this->key, 0, $iv);
+        $result = openssl_encrypt($data, $method, $key, 0, $iv);
         return $result;
     }
 
@@ -62,10 +62,11 @@ class Des3
      * @abstract
      * @throws \Exception
      */
-    public function decrypt(string $data, string $method = self::DES_EDE3_CBC)
+    public function decrypt($data, $method = self::DES_EDE3_CBC)
     {
         $iv = $this->getIv($method);
-        $result = openssl_decrypt($data, $method, $this->key, 0, $iv);
+        $key = str_pad($this->key[0], 24, '0');
+        $result = openssl_decrypt($data, $method, $key, 0, $iv);
         return $result;
     }
 
@@ -94,5 +95,6 @@ class Des3
         }
         return $iv;
     }
+
 
 } 
