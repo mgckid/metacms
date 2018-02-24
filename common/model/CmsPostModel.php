@@ -166,7 +166,7 @@ class CmsPostModel extends BaseModel
      * @since 2017年7月6日 17:14:49
      * @abstract
      */
-    public function getModelRecordList($model_id, $orm, $offset = '', $limit = '', $for_count = false, $sort_field = 'created', $order = 'id', $field = '*')
+    public function getModelRecordList($model_id, $orm, $offset = '', $limit = '', $for_count = false, $sort_field = 'created', $sort = 'desc', $field = '*')
     {
         $orm = $this->getOrm($orm)->where('cms_post.model_id', $model_id)->where('cms_post.deleted', 0);
         #查询数据
@@ -223,7 +223,7 @@ class CmsPostModel extends BaseModel
             if ($limit) {
                 $orm = $orm->limit($limit);
             }
-            if ($order == 'desc') {
+            if ($sort == 'desc') {
                 $orm = $orm->order_by_desc($sort_field);
             } else {
                 $orm = $orm->order_by_asc($sort_field);

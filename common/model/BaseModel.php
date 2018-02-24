@@ -113,7 +113,7 @@ class BaseModel extends Model
      * @since 2017年7月6日 17:14:49
      * @abstract
      */
-    public function getRecordList($orm = '', $offset = '', $limit = '', $for_count = false, $sort_field = 'id', $order = 'desc', $field = '*')
+    public function getRecordList($orm = '', $offset = '', $limit = '', $for_count = false, $sort_field = 'id', $sort = 'desc', $field = '*')
     {
         $orm = $this->getOrm($orm)->where_equal('deleted', 0);
         if ($for_count) {
@@ -126,7 +126,7 @@ class BaseModel extends Model
             } elseif (is_string($field)) {
                 $model = $model->select_expr($field);
             }
-            if ($order == 'desc') {
+            if ($sort == 'desc') {
                 $model = $model->order_by_desc($sort_field);
             } else {
                 $model = $model->order_by_asc($sort_field);
