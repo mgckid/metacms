@@ -12,6 +12,7 @@
         "league/plates": "^3.3",
         "overtrue/validation": "^2.0",
         "crazycodr/standard-exceptions": "^2.1",
-        "j4mie/idiorm": "^1.5"
+        "j4mie/idiorm": "^1.5",
+        "php-amqplib/php-amqplib": "^2.7"
     }
 }

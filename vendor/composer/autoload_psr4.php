@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'PhpAmqpLib\\' => array($vendorDir . '/php-amqplib/php-amqplib/PhpAmqpLib'),
     'Overtrue\\Validation\\' => array($vendorDir . '/overtrue/validation/src'),
     'Noodlehaus\\' => array($vendorDir . '/hassankhan/config/src'),
     'League\\Plates\\' => array($vendorDir . '/league/plates/src'),

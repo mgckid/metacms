@@ -14,6 +14,7 @@ class ComposerStaticInit64bad77e4bd315b839fe918e1034887a
         'P' => 
         array (
             'Psr\\Container\\' => 14,
+            'PhpAmqpLib\\' => 11,
         ),
         'O' => 
         array (
@@ -41,6 +42,10 @@ class ComposerStaticInit64bad77e4bd315b839fe918e1034887a
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'PhpAmqpLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-amqplib/php-amqplib/PhpAmqpLib',
         ),
         'Overtrue\\Validation\\' => 
         array (
