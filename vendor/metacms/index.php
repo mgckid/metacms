@@ -140,6 +140,7 @@ try {
     #运行应用
     \metacms\base\Application::run();
 } catch (\Exception $e) {
+    send_http_status(404);
     errorPage($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTraceAsString());
 };
 

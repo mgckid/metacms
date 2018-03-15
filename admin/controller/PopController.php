@@ -63,13 +63,23 @@ class PopController extends UserBaseController
         }
     }
 
+    /**
+     * 添加采集记录
+     * @privilege 添加采集记录|Admin/Pop/addCollectSnap|2d086fe7-280c-11e8-95a7-fcaa14d9feb4|3
+     */
     public function addCollectSnap()
     {
         if (!IS_POST) {
             $this->ajaxFail('非法请求');
         }
         $data = $_POST;
+        $title = $data['title'];
         $collectSnapModel = new CollectSnapModel();
+        $orm = $collectSnapModel->orm()->where('title', $title);
+        $r = $collectSnapModel->getAllRecord($orm);
+        if (!empty($r)) {
+            $this->ajaxFail('该条数据已存在');
+        }
         $result = $collectSnapModel->addRecord($_POST);
         if (!$result) {
             $this->ajaxFail($this->getMessage());
