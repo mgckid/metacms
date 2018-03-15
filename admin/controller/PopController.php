@@ -10,6 +10,7 @@ namespace app\controller;
 
 
 use app\model\BaseModel;
+use app\model\CollectSnapModel;
 
 /**
  * 弹出层控制器
@@ -61,4 +62,21 @@ class PopController extends UserBaseController
             $this->ajaxSuccess('执行成功', $result);
         }
     }
+
+    public function addCollectSnap()
+    {
+        if (!IS_POST) {
+            $this->ajaxFail('非法请求');
+        }
+        $data = $_POST;
+        $collectSnapModel = new CollectSnapModel();
+        $result = $collectSnapModel->addRecord($_POST);
+        if (!$result) {
+            $this->ajaxFail($this->getMessage());
+        } else {
+            $this->ajaxSuccess('执行成功', $result);
+        }
+    }
+
+
 } 
