@@ -42,7 +42,7 @@ class View
      */
     static function getEngine()
     {
-       return Application::templateEngine();
+        return Application::templateEngine();
     }
 
 
@@ -53,7 +53,10 @@ class View
      */
     public static function display($view, $data = array())
     {
-        die(self::render($view, $data));
+
+        $html = self::render($view, $data);
+        send_http_status(200);
+        die($html);
     }
 
     /**
@@ -65,7 +68,7 @@ class View
     public static function render($view, array $data = array())
     {
         if (!self::getEngine()->exists($view)) {
-           throw new InternalServerErrorException('模版不存在');
+            throw new InternalServerErrorException('模版不存在');
         }
         $data = array_merge(self::getInstance()->data, $data);
         return self::getEngine()->render($view, $data);

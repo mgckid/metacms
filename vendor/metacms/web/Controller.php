@@ -42,6 +42,7 @@ class Controller
      */
     public function ajaxExit($data)
     {
+        send_http_status(200);
         exit(json_encode($data, JSON_UNESCAPED_UNICODE));
     }
 

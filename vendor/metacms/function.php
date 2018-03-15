@@ -137,7 +137,7 @@ function msubstr($str, $start = 0, $length, $charset = "utf-8", $suff = true)
  * @param array $data 表单数据
  * @return mixed
  */
-function requestGet($url, array  $data = array())
+function requestGet($url, array $data = array())
 {
     $header = array(
         'token:' . md5(time()),
@@ -241,7 +241,7 @@ function errorPage($errno, $error_message, $errfile, $errline, $errtrace)
                 'trace' => $errtrace,
             ],
         ]);
-        if ($errno < 400 || $errno >= 500) {
+        if ($errno < 400 || $errno >= 500 || $errno == 200) {
             $errno = 500;
         }
         send_http_status($errno);

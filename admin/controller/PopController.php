@@ -11,6 +11,7 @@ namespace app\controller;
 
 use app\model\BaseModel;
 use app\model\CollectSnapModel;
+use metacms\base\Page;
 
 /**
  * 弹出层控制器
@@ -86,6 +87,65 @@ class PopController extends UserBaseController
         } else {
             $this->ajaxSuccess('执行成功', $result);
         }
+    }
+
+    /**
+     * 修改采集记录
+     * @privilege 修改采集记录|Admin/Pop/editCollectSnap|2e3a5733-2833-11e8-9443-00163e003500|3
+     */
+    public function editCollectSnap()
+    {
+        if (!IS_POST) {
+            $this->ajaxFail('非法请求');
+        }
+        $data = $_POST;
+        $collectSnapModel = new CollectSnapModel();
+        $result = $collectSnapModel->addRecord($_POST);
+        if (!$result) {
+            $this->ajaxFail($this->getMessage());
+        } else {
+            $this->ajaxSuccess('执行成功', $result);
+        }
+    }
+
+    /**
+     * 获取采集记录
+     * @privilege 获取采集记录|Admin/Pop/getCollectSnap|4d30e533-2820-11e8-9443-00163e003500|3
+     */
+    public function getCollectSnap()
+    {
+        if (!IS_POST) {
+            $this->ajaxFail('非法请求');
+        }
+        #验证
+        $rule = array(
+            'spider_name' => 'required',
+            'collect_status' => 'required',
+            'collect_status' => 'in:-10,0,10,20',
+
+        );
+        $attr = array(
+            'spider_name' => '爬虫脚本名称',
+            'collect_status' => '采集状态',
+        );
+        $collectSnapModel = new CollectSnapModel();
+        $validate = $collectSnapModel->validate()->make($_POST, $rule, [], $attr);
+        if (false === $validate->passes()) {
+            $this->ajaxFail($validate->messages()->first());
+        }
+        $p = isset($_POST['p']) ? intval($_POST['p']) : 1;
+        $page_size = 50;
+        $orm = $collectSnapModel->orm()->where('spider_name', $_POST['spider_name'])->where('collect_status', $_POST['collect_status']);
+        $count = $collectSnapModel->getRecordList($orm, '', '', true);
+        $page = new Page($count, $p, $page_size);
+        $result = $collectSnapModel->getRecordList($orm, $page->getOffset(), $page->getPageSize(), false);
+        $data = [
+            'count' => $count,
+            'list' => $result,
+            'page_size' => $page_size,
+            'max_p' => ceil($count / $page_size),
+        ];
+        $this->ajaxSuccess('获取成功', $data);
     }
 
 
