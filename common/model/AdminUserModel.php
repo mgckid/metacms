@@ -21,11 +21,12 @@ class AdminUserModel extends BaseModel {
      * @return boolean
      */
     public function validatePassword($username, $password) {
-        $user = $this->orm()->where(array('username' => $username))->find_one()->as_array();
-        if (!$user) {
+        $result = $this->orm()->where(array('username' => $username))->find_one();
+        if (!$result) {
             $this->setMessage('用户名不存在');
             return FALSE;
         }
+        $user = $result->as_array();
 
         if ($user['password'] !== sha1($password)) {
             $this->setMessage('密码错误');

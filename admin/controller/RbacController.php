@@ -198,7 +198,7 @@ class RbacController extends UserBaseController
 
             $adminAdminUserModel = new AdminUserModel();
             $request_data['user_id'] = $adminAdminUserModel->getUserId();
-
+            $request_data['password'] = sha1($request_data['password']);
             $result = $adminAdminUserModel->addRecord($request_data);
             if ($result) {
                 $this->ajaxSuccess('用户添加成功');

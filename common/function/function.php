@@ -164,7 +164,7 @@ function getRandNumber($length = 6)
         $t = intval($length / 9);
         $tail = $length % 9;
         for ($i = 1; $i <= $t; $i++) {
-            $num .= substr(mt_rand('1' . str_repeat('0', 9), str_repeat('9', 10)), 1);
+            $num .= substr(mt_rand(intval('1' . str_repeat('0', 9)), intval(str_repeat('9', 10))), 1);
         }
         $num .= substr(mt_rand('1' . str_repeat('0', $tail), str_repeat('9', $tail + 1)), 1);
         return $num;
