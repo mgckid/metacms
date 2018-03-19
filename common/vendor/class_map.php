@@ -12,6 +12,8 @@ return array(
     'Ueditor' => __DIR__ . '/Ueditor',
     /*玻森中文语义开放平台语义分析API*/
     'BosonNLP' => __DIR__ . '/BosonNLP',
+    /*百度人工智能API*/
+    'BaiduAI' => __DIR__ . '/BaiduAI',
     #基于词库的中文转拼音优质解决方案 http://overtrue.me/pinyin
     'Overtrue\Pinyin' => __DIR__ . '/overtrue/pinyin/src',
     #简单的 PHP 类注释解析类
