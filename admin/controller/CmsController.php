@@ -14,6 +14,7 @@ use app\model\CmsPageModel;
 use app\model\CmsTagModel;
 use app\model\CoreTextModel;
 use app\model\DictionaryModelModel;
+use BaiduAI\BaiduAI;
 use metacms\base\Application;
 use metacms\base\BosonNLP;
 use metacms\base\Hooks;
@@ -402,6 +403,7 @@ class CmsController extends UserBaseController
             $this->ajaxFail('非法请求');
         }
         $text = isset($_POST['content']) ? strip_tags(htmlspecialchars_decode($_POST['content'])) : '';
+        $title = isset($_POST['title']) ? strip_tags(htmlspecialchars_decode($_POST['title'])) : '';
         if (empty($text)) {
             $this->ajaxFail('源数据不能为空');
         }
@@ -409,7 +411,17 @@ class CmsController extends UserBaseController
         if (empty($token)) {
             $this->ajaxFail('请先设置玻森分词api Token');
         }
-
+        $baiduAi = BaiduAI::getInstance();
+        $cache_name = 'baidu_ai_accesss_token';
+        $cache = Application::cache($cache_name);
+        if ($cache->isCached($cache_name)) {
+            $result = $cache->retrieve($cache_name);
+        } else {
+            $result = $baiduAi->getAccessToken('pRUd7wVakrh539PsZ255mCD3', 'eheuqwG24nGxeY6EedAYVLuij6c9GAMr');
+            $cache->store($cache_name, $result, $result['expires_in']);
+            $cache->eraseExpired();
+        }
+        $baiduAi->setAccessToken($result['access_token']);
         #过滤非法字符
         $search = array(" ","　","\n","\r","\t","&nbsp");
         $replace = array("","","","","","");
@@ -420,26 +432,12 @@ class CmsController extends UserBaseController
         $pram = [
             'top_k' => 10,
         ];
-        $result = $fenci->analysis($fenci::ACTION_KEYWORDS, $text, $pram);
-        if (!$result) {
-            $this->ajaxFail('分词失败');
-        }
-        $keyword = [];
-        foreach ($result[0] as $key => $val) {
-            $keyword[] = $val[1];
-        }
-        //提取描述
-        $data = [
-            'content' => $text,
-            'not_exceed' => 0,
-            'percentage' => 0.1,
-        ];
-        $result = $fenci->analysis($fenci::ACTION_SUMMARY, $data);
-        $summary = !empty($result) ? str_replace(PHP_EOL, "", $result) : '';
+        $tag = $baiduAi->keyword($title,$text);
+        $keyword =  $baiduAi->lexer($text);
         $return = [
-            'keyword' => join(',', $keyword),
-            'tag' => join(',', array_slice($keyword, 0, 5)),
-            'description' => $summary,
+            'keyword' => join(',', $keyword['keyword']),
+            'tag' => !empty($tag) ? join(',', array_slice($tag, 0, 5)) : '',
+            'description' => $keyword['description'],
         ];
         $this->ajaxSuccess('获取成功', $return);
     }

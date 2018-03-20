@@ -42,7 +42,8 @@
     //分词操作
     $('#fenci').on('click', function () {
         var content = $('[name=content]').val();
-        var data = {content: content}
+        var title = $('[name=title]').val();
+        var data = {content: content, title: title}
         $.post('<?=U('admin/Cms/ajaxFenci')?>', data, function (data) {
             if (data.status != 1) {
                 layer.alert(data.msg);

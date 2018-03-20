@@ -18,10 +18,8 @@ class BaiduAI
     private $curlObj;
     static private $instance;
 
-    private function __construct($access_token)
+    private function __construct()
     {
-        $this->access_token = $access_token;
-
         $curl = new \Curl\Curl();
         $curlopt_proxy = C('CURLOPT_PROXY');
         if ($curlopt_proxy) {
@@ -37,10 +35,10 @@ class BaiduAI
         // TODO: Implement __clone() method.
     }
 
-    static public function getInstance($access_token)
+    static public function getInstance()
     {
         if (!self::$instance instanceof self) {
-            self::$instance = new self($access_token);
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -52,12 +50,12 @@ class BaiduAI
      * @since 2018年3月19日 16:14:00
      * @abstract
      */
-    private function getCurlObj()
+    private function curl()
     {
         return $this->curlObj;
     }
 
-    public function getAccessToken($client_id = '', $client_secret = '')
+    public function getAccessToken($client_id, $client_secret)
     {
         $url = 'https://aip.baidubce.com/oauth/2.0/token';
         $post_data = [
@@ -66,7 +64,7 @@ class BaiduAI
             'client_secret' => 'eheuqwG24nGxeY6EedAYVLuij6c9GAMr'
         ];
 
-        $curl = $this->getCurlObj();
+        $curl = $this->curl();
         $result = $curl->post($url, $post_data);
         $result = json_decode(json_encode($result), true);
         if (is_array($result)) {
@@ -80,11 +78,13 @@ class BaiduAI
     public function keyword($title, $content)
     {
         $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/keyword?access_token=' . $this->access_token;
+        $title = substr($title, 0, 80);
+        $content = substr($content, 0, 65535);
         $post_data = [
             'title' => $title,
             'content' => $content,
         ];
-        $curl = $this->getCurlObj();
+        $curl = $this->curl();
         $post_data = json_encode($post_data);
         $post_data = iconv('utf-8', 'gbk', $post_data);
         $curl->setHeader('Content-type', 'application/json');
@@ -94,16 +94,21 @@ class BaiduAI
         }
         $result = iconv('gbk', 'utf-8', $responce);
         $result = json_decode($result, true);
-        print_g($result);
+        if (empty($result['items'])) {
+            return false;
+        }
+        $keyword = array_column($result['items'], 'tag');
+        return $keyword;
     }
 
     public function lexer($text)
     {
         $url = 'https://aip.baidubce.com/rpc/2.0/nlp/v1/lexer?access_token=' . $this->access_token;
+        $text = substr($text, 0, 20000);
         $post_data = [
             'text' => $text
         ];
-        $curl = $this->getCurlObj();
+        $curl = $this->curl();
         $post_data = json_encode($post_data);
         $post_data = iconv('utf-8', 'gbk', $post_data);
         $curl->setHeader('Content-type', 'application/json');
@@ -111,17 +116,28 @@ class BaiduAI
         if (is_object($responce)) {
             $responce = json_encode($responce);
         }
-//        print_g($responce);
         $result = iconv('gbk', 'utf-8', $responce);
         $result = json_decode($result, true);
-        $keyword = [];
-        foreach ($result['items'] as $item) {
-            if (strpos($item['pos'], 'n') !== false and !empty(trim($item['item']))) {
-                $keyword[] = $item['item'];
+
+        $data = [];
+        if (isset($result['items']) and !empty($result['items'])) {
+            foreach ($result['items'] as $item) {
+                if (empty(trim($item['item']))) {
+                    continue;
+                }
+                if (in_array($item['pos'], ['n'])) {
+                    $data['n'][] = $item['item'];
+                }
+                if (in_array($item['pos'], ['nz'])) {
+                    $data['nz'][] = $item['item'];
+                }
             }
         }
-        $keyword = array_values(array_unique($keyword));
-        return ($keyword);
+        $data['n'] = isset($data['n']) ? array_values(array_unique($data['n'])) : [];
+        $data['nz'] = isset($data['nz']) ? array_values(array_unique($data['nz'])) : [];
+        $data['description'] = isset($result['text']) ? mb_substr($result['text'], 0, 180) : '';
+        $data['keyword'] = array_unique(array_slice(array_merge($data['nz'], $data['n']), 0, 30));
+        return $data;
     }
 
     public function topic($title, $content)
@@ -131,7 +147,7 @@ class BaiduAI
             'title' => $title,
             'content' => $content,
         ];
-        $curl = $this->getCurlObj();
+        $curl = $this->curl();
         $post_data = json_encode($post_data);
         $post_data = iconv('utf-8', 'gbk', $post_data);
         $curl->setHeader('Content-type', 'application/json');
@@ -142,6 +158,11 @@ class BaiduAI
         $result = iconv('gbk', 'utf-8', $responce);
         $result = json_decode($result, true);
         return $result;
+    }
+
+    public function setAccessToken($access_token)
+    {
+        $this->access_token = $access_token;
     }
 
 
