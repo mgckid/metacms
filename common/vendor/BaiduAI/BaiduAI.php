@@ -136,7 +136,7 @@ class BaiduAI
         $data['n'] = isset($data['n']) ? array_values(array_unique($data['n'])) : [];
         $data['nz'] = isset($data['nz']) ? array_values(array_unique($data['nz'])) : [];
         $data['description'] = isset($result['text']) ? mb_substr($result['text'], 0, 180) : '';
-        $data['keyword'] = array_unique(array_slice(array_merge($data['nz'], $data['n']), 0, 30));
+        $data['keyword'] = array_unique(array_slice(array_merge($data['nz'], $data['n']), 0, 20));
         return $data;
     }
 
