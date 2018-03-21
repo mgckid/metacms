@@ -427,11 +427,6 @@ class CmsController extends UserBaseController
         $replace = array("","","","","","");
         $text = str_replace($search, $replace, $text);
 
-        $fenci = new \BosonNLP\BosonNLP($token);
-        //提取关键字
-        $pram = [
-            'top_k' => 10,
-        ];
         $tag = $baiduAi->keyword($title,$text);
         $keyword =  $baiduAi->lexer($text);
         $return = [
