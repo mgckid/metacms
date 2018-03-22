@@ -10,6 +10,7 @@
 namespace BaiduAI;
 
 use Curl\Curl;
+use metacms\base\Application;
 
 class BaiduAI
 {
@@ -94,7 +95,10 @@ class BaiduAI
         }
         $result = iconv('gbk', 'utf-8', $responce);
         $result = json_decode($result, true);
-        if (empty($result['items'])) {
+        if (!isset($result['items']) || empty($result['items'])) {
+            if (isset($result['error_code'])) {
+                Application::setMessage($result['error_code'] . ':' . $result['error_msg']);
+            }
             return false;
         }
         $keyword = array_column($result['items'], 'tag');
@@ -118,25 +122,28 @@ class BaiduAI
         }
         $result = iconv('gbk', 'utf-8', $responce);
         $result = json_decode($result, true);
-
+        if (!isset($result['items']) or empty($result['items'])) {
+            if (isset($result['error_code'])) {
+                Application::setMessage($result['error_code'] . ':' . $result['error_msg']);
+            }
+            return false;
+        }
         $data = [];
-        if (isset($result['items']) and !empty($result['items'])) {
-            foreach ($result['items'] as $item) {
-                if (empty(trim($item['item']))) {
-                    continue;
-                }
-                if (in_array($item['pos'], ['n'])) {
-                    $data['n'][] = $item['item'];
-                }
-                if (in_array($item['pos'], ['nz'])) {
-                    $data['nz'][] = $item['item'];
-                }
+        foreach ($result['items'] as $item) {
+            if (empty(trim($item['item']))) {
+                continue;
+            }
+            if (in_array($item['pos'], ['n'])) {
+                $data['n'][] = $item['item'];
+            }
+            if (in_array($item['pos'], ['nz'])) {
+                $data['nz'][] = $item['item'];
             }
         }
         $data['n'] = isset($data['n']) ? array_values(array_unique($data['n'])) : [];
         $data['nz'] = isset($data['nz']) ? array_values(array_unique($data['nz'])) : [];
-        $data['description'] = isset($result['text']) ? mb_substr($result['text'], 0, 180) : '';
-        $data['keyword'] = array_unique(array_slice(array_merge($data['nz'], $data['n']), 0, 20));
+        $data['description'] = isset($result['text']) ? mb_substr($result['text'], 0, 200) : '';
+        $data['keyword'] = array_unique(array_slice(array_merge($data['nz'], $data['n']), 0, 50));
         return $data;
     }
 

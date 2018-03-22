@@ -74,6 +74,9 @@ class PopController extends UserBaseController
             $this->ajaxFail('非法请求');
         }
         $data = $_POST;
+        foreach ($data as $key =>  $value){
+            $data[$key] = mb_convert_encoding($value,'utf-8');
+        }
         $title = $data['title'];
         $collectSnapModel = new CollectSnapModel();
         $orm = $collectSnapModel->orm()->where('title', $title);
@@ -99,8 +102,14 @@ class PopController extends UserBaseController
             $this->ajaxFail('非法请求');
         }
         $data = $_POST;
+        foreach ($data as $key => $value) {
+            $data[$key] = mb_convert_encoding($value, 'utf-8');
+        }
+        if (isset($data['html_content'])) {
+            $data['html_content'] = htmlspecialchars($data['html_content']);
+        }
         $collectSnapModel = new CollectSnapModel();
-        $result = $collectSnapModel->addRecord($_POST);
+        $result = $collectSnapModel->addRecord($data);
         if (!$result) {
             $this->ajaxFail($this->getMessage());
         } else {
@@ -121,7 +130,7 @@ class PopController extends UserBaseController
         $rule = array(
             'spider_name' => 'required',
             'collect_status' => 'required',
-            'collect_status' => 'in:-10,0,10,20',
+            'collect_status' => 'in:-10,0,10,15,20',
 
         );
         $attr = array(

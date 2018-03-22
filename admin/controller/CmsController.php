@@ -410,32 +410,45 @@ class CmsController extends UserBaseController
         if (empty($text)) {
             $this->ajaxFail('文章内容不能为空');
         }
-//        $token = $this->getSiteInfo('site_fenci_token');
-//        if (empty($token)) {
-//            $this->ajaxFail('请先设置玻森分词api Token');
-//        }
+        $baidu_ai_api_key = $this->getSiteInfo('baidu_ai_api_key');
+        if (empty($baidu_ai_api_key)) {
+            $this->ajaxFail('请设置百度AI接口API Key');
+        }
+        $baidu_ai_secret_key = $this->getSiteInfo('baidu_ai_secret_key');
+        if (empty($baidu_ai_secret_key)) {
+            $this->ajaxFail('请设置百度AI接口Secret Key');
+        }
+        send_http_status(400);
         $baiduAi = BaiduAI::getInstance();
         $cache_name = 'baidu_ai_accesss_token';
+        $cacge_key = $baidu_ai_api_key . $baidu_ai_secret_key;
         $cache = Application::cache($cache_name);
-        if ($cache->isCached($cache_name)) {
-            $result = $cache->retrieve($cache_name);
+        if ($cache->isCached($cacge_key)) {
+            $result = $cache->retrieve($cacge_key);
         } else {
-            $result = $baiduAi->getAccessToken('pRUd7wVakrh539PsZ255mCD3', 'eheuqwG24nGxeY6EedAYVLuij6c9GAMr');
-            $cache->store($cache_name, $result, $result['expires_in']);
+            $result = $baiduAi->getAccessToken($baidu_ai_api_key, $baidu_ai_secret_key);
+            $cache->store($cacge_key, $result, $result['expires_in']);
             $cache->eraseExpired();
         }
         $baiduAi->setAccessToken($result['access_token']);
         #过滤非法字符
-        $search = array(" ","　","\n","\r","\t","&nbsp");
-        $replace = array("","","","","","");
+        $search = array(" ", "　", "\n", "\r", "\t", "&nbsp");
+        $replace = array("", "", "", "", "", "");
         $text = str_replace($search, $replace, $text);
 
-        $tag = $baiduAi->keyword($title,$text);
-        $keyword =  $baiduAi->lexer($text);
+        $tag = $baiduAi->keyword($title, $text);
+        $keyword = $baiduAi->lexer($text);
+        if ($tag === false || $keyword === false) {
+            $this->ajaxFail('分词出错,' . $this->getMessage());
+        }
+        $keywords = join(',', $keyword['keyword']);
+        $keywords = strlen($keywords) > 300 ? mb_substr($keywords, 0, 100) : $keywords;
+        $description = $keyword['description'];
+        $description = strlen($description) > 600 ? mb_substr($description, 0, 200) : $description;
         $return = [
-            'keyword' => join(',', $keyword['keyword']),
+            'keyword' => $keywords,
             'tag' => !empty($tag) ? join(',', array_slice($tag, 0, 5)) : '',
-            'description' => $keyword['description'],
+            'description' =>$description,
         ];
         $this->ajaxSuccess('获取成功', $return);
     }
