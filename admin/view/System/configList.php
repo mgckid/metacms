@@ -24,7 +24,7 @@
                     <?php endforeach;?>
                     <td>
                         <a class="btn btn-success btn-xs" data-power="admin/System/addConfig" href="<?= U('admin/System/editConfig',array('id'=>$value['id']))?>">编辑</a>
-                        <a class="btn btn-danger btn-xs" data-power="admin/System/delConfig" href="javascript:void(0)" onclick="del(<?= $value['id'] ?>)">删除</a>
+                        <a class="btn btn-danger btn-xs" data-power="admin/System/delConfig" href="javascript:void(0)" onclick="delConfig(<?= $value['id'] ?>)">删除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -33,3 +33,24 @@
         <!--/列表-->
     </div>
 </div>
+<script>
+    //删除广告位
+    function delConfig(id) {
+        if ('number' != typeof (id)) {
+            //id = [id];
+            return false;
+        }
+        layer.confirm('您确定要删除选中的配置么？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.post('<?= U("admin/system/delConfig") ?>', {id: id}, function (data) {
+                layer.alert(data.msg)
+                if (data.status == 1) {
+                    $('#row' + id).remove();
+                }
+            }, 'json');
+        }, function () {
+            return
+        });
+    }
+</script>

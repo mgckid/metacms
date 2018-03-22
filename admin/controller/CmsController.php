@@ -404,13 +404,16 @@ class CmsController extends UserBaseController
         }
         $text = isset($_POST['content']) ? strip_tags(htmlspecialchars_decode($_POST['content'])) : '';
         $title = isset($_POST['title']) ? strip_tags(htmlspecialchars_decode($_POST['title'])) : '';
+        if (empty($title)) {
+            $this->ajaxFail('文章标题不能为空');
+        }
         if (empty($text)) {
-            $this->ajaxFail('源数据不能为空');
+            $this->ajaxFail('文章内容不能为空');
         }
-        $token = $this->getSiteInfo('site_fenci_token');
-        if (empty($token)) {
-            $this->ajaxFail('请先设置玻森分词api Token');
-        }
+//        $token = $this->getSiteInfo('site_fenci_token');
+//        if (empty($token)) {
+//            $this->ajaxFail('请先设置玻森分词api Token');
+//        }
         $baiduAi = BaiduAI::getInstance();
         $cache_name = 'baidu_ai_accesss_token';
         $cache = Application::cache($cache_name);
