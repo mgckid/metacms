@@ -24,6 +24,7 @@ function getClientIp()
  */
 function print_g($var)
 {
+    send_http_status(201);
     echo "<pre>";
     print_r($var);
     echo "</pre>";

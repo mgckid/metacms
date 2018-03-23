@@ -447,8 +447,8 @@ class CmsController extends UserBaseController
         $description = strlen($description) > 600 ? mb_substr($description, 0, 200) : $description;
         $return = [
             'keyword' => $keywords,
-            'tag' => !empty($tag) ? join(',', array_slice($tag, 0, 5)) : '',
-            'description' =>$description,
+            'tag' => !empty($tag) ? join(',', array_slice($tag, 0, 1)) : '',
+            'description' => $description,
         ];
         $this->ajaxSuccess('获取成功', $return);
     }

@@ -117,6 +117,7 @@ class Request
 
     public function dispatchByPathinfo($request = '')
     {
+        $request = urldecode($request);
         $data = array(
             'module' => '',
             'controller' => '',
@@ -168,6 +169,7 @@ class Request
             'controller' => '',
             'action' => '',
         );
+        $request = urldecode($request);
         $request = trim($request, '/,?');
         if (!empty($request)) {
             $_request = explode('&', $request);
