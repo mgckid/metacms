@@ -41,6 +41,8 @@ metadmin后台管理系统 数据库支持mysql/sqlite
 3.在命令行打开项目根目录并执行 composer update 命令安装全部包含的库文件 
 
 4.在浏览器中访问自己设置的域名即可（本机运行还需修改本机host）
+  http://域名/admin ### 后台管理地址
+  http://域名/blog  ### 前台预览地址  
 ```
 
 
