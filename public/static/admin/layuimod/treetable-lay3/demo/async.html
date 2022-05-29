@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layui树形表格</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+<body class="layui-hide">
+<div class="right-desc">
+    <div class="layui-text desc-item">
+        treeTable实现了layui数据表格的大部分功能，并且在用法上与几乎数据表格一致，
+        支持懒加载、复选框联动(半选)、拖拽列宽、固定表头等功能，
+        <a href="https://gitee.com/whvse/treetable-lay" target="_blank">码云下载</a>。
+    </div>
+    <div class="layui-text desc-item" style="padding: 0;overflow: hidden;">
+        <img src="https://s2.ax1x.com/2019/08/23/msiO78.png" width="100%"/>
+        <div style="padding: 5px 10px;">
+            EasyWeb管理系统模板
+            <a href="https://demo.easyweb.vip/iframe/" style="float: right;" target="_blank">前往查看</a>
+        </div>
+    </div>
+</div>
+<div class="page-wrapper">
+    <blockquote class="layui-elem-quote" style="margin: 15px 0;">Layui树形表格3.x演示</blockquote>
+    <div class="layui-btn-container">
+        <a href="index.html" class="layui-btn layui-btn-sm layui-btn-primary">
+            <i class="layui-icon">&#xe65c;</i>返回
+        </a>
+    </div>
+    <table id="demoTreeTb"></table>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tbBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../'
+    }).use(['treeTable'], function () {
+        var $ = layui.jquery;
+        var treeTable = layui.treeTable;
+        $('body').removeClass('layui-hide');
+
+        // 渲染表格
+        treeTable.render({
+            elem: '#demoTreeTb',
+            toolbar: true,
+            tree: {
+                iconIndex: 2
+            },
+            cols: [[
+                {type: 'numbers'},
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID'},
+                {field: 'name', title: 'name'},
+                {field: 'createTime', title: '创建时间'},
+                {align: 'center', toolbar: '#tbBar', title: '操作', width: 120}
+            ]],
+            reqData: function (data, callback) {  // 懒加载也可以用url方式，这里用reqData方式演示
+                setTimeout(function () {  // 故意延迟一下
+                    var url = 'json/list';
+                    url += ((data ? ('_' + data.id) : '') + '.json');
+                    $.get(url, function (res) {
+                        callback(res.data);
+                    });
+                }, 800);
+            },
+            style: 'margin-top:0;'
+        });
+
+    });
+</script>
+</body>
+</html>

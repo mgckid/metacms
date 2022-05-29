@@ -1,0 +1,12 @@
+如果要使用多应用模式，你需要安装多应用模式扩展think-multi-app。
+composer require topthink/think-multi-app
+
+如果使用了多应用模式，可以快速生成一个应用，例如生成demo应用的指令如下：
+>php think build demo
+
+启动内置服务器 命令行切换到应用根目录后，输入：
+>php think run
+
+新版框架默认只能支持PHP原生模板，如果需要使用thinkTemplate模板引擎，需要安装think-view扩展（该扩展会自动安装think-template依赖库）。
+
+composer require topthink/think-view

@@ -1,0 +1,27 @@
+{
+  "code": 200,
+  "msg": "ok",
+  "data": [
+    {
+      "id": "1_1",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": true
+    },
+    {
+      "id": "1_2",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": false
+    },
+    {
+      "id": "1_3",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "code": 200,
+  "msg": "ok",
+  "data": [
+    {
+      "id": "1",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": true
+    },
+    {
+      "id": "2",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": true
+    },
+    {
+      "id": "3",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": true
+    },
+    {
+      "id": "4",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": false
+    },
+    {
+      "id": "5",
+      "name": "xxx",
+      "state": 0,
+      "createTime": "2019/11/18 10:44:00",
+      "haveChild": false
+    }
+  ]
+}

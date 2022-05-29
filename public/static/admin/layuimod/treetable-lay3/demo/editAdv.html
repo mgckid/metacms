@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layui树形表格</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/demo.css">
+    <style>
+        [lay-date] {
+            background-image: url(css/icon_date.png);
+            background-position: right center;
+            background-repeat: no-repeat;
+            padding-right: 28px;
+            cursor: pointer;
+        }
+
+        .layui-table td .layui-form-select .layui-input {
+            height: 28px;
+        }
+    </style>
+</head>
+<body class="layui-hide">
+<div class="right-desc">
+    <div class="layui-text desc-item">
+        treeTable实现了layui数据表格的大部分功能，并且在用法上与几乎数据表格一致，
+        支持懒加载、复选框联动(半选)、拖拽列宽、固定表头等功能，
+        <a href="https://gitee.com/whvse/treetable-lay" target="_blank">码云下载</a>。
+    </div>
+    <div class="layui-text desc-item" style="padding: 0;overflow: hidden;">
+        <img src="https://s2.ax1x.com/2019/08/23/msiO78.png" width="100%"/>
+        <div style="padding: 5px 10px;">
+            EasyWeb管理系统模板
+            <a href="https://demo.easyweb.vip/iframe/" style="float: right;" target="_blank">前往查看</a>
+        </div>
+    </div>
+</div>
+<div class="page-wrapper">
+    <blockquote class="layui-elem-quote" style="margin: 15px 0;">Layui树形表格3.x演示</blockquote>
+    <div class="layui-btn-container">
+        <a href="edit.html" class="layui-btn layui-btn-sm layui-btn-primary">
+            <i class="layui-icon">&#xe65c;</i>返回
+        </a>
+        <button class="layui-btn layui-btn-sm layui-btn-primary">演示复杂单元格编辑的实现</button>
+    </div>
+    <table id="demoTreeTb"></table>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tbBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="tbState">
+    <input type="checkbox" lay-filter="ckState" value="{{d.id}}" lay-skin="switch"
+           lay-text="正常|锁定" {{d.state==0?'checked':''}}/>
+</script>
+
+<!-- 表格下拉框列 -->
+<script type="text/html" id="tbSel">
+    <select data-id="{{d.id}}" lay-filter="demoSel">
+        <option value="">请选择</option>
+        <option value="male" {{d.sex=='male'?'selected':''}}>男</option>
+        <option value="female" {{d.sex=='female'?'selected':''}}>女</option>
+    </select>
+</script>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../'
+    }).use(['layer', 'util', 'laydate', 'form', 'treeTable'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var util = layui.util;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var treeTable = layui.treeTable;
+        $('body').removeClass('layui-hide');
+
+        // 渲染表格
+        var insTb = treeTable.render({
+            elem: '#demoTreeTb',
+            url: 'json/data.json',
+            toolbar: true,
+            tree: {
+                iconIndex: 2,
+                isPidData: true
+            },
+            cols: [[
+                {type: 'numbers'},
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID', minWidth: 148},
+                {field: 'name', title: 'name<i class=\"layui-icon\">&#xe642;</i>', edit: 'text'},
+                {field: 'sex', title: 'sex', templet: '#tbSel', singleLine: false},
+                {
+                    title: '创建时间', templet: function (d) {
+                        return '<div lay-date="' + d.id + '">' + util.toDateString(d.createTime, 'yyyy-MM-dd') + '</div>';
+                    }
+                },
+                {templet: '#tbState', title: '状态', width: 95},
+                {align: 'center', toolbar: '#tbBar', title: '操作', width: 120}
+            ]],
+            done: function () {
+                renderLayDate();
+            },
+            style: 'margin-top:0;'
+        });
+
+        // 渲染laydate
+        function renderLayDate() {
+            $('[lay-date]').each(function () {
+                laydate.render({
+                    elem: this,
+                    trigger: 'click',
+                    done: function (value, date, endDate) {
+                        var id = $(this.elem).attr('lay-date');
+                        insTb.update(id, {createTime: value});
+                    }
+                });
+            });
+        }
+
+        // 监听单元格编辑事件
+        treeTable.on('edit(demoTreeTb)', function (obj) {
+            console.log(obj);
+        });
+
+        // 监听select选择事件
+        form.on('select(demoSel)', function (data) {
+            var id = $(data.elem).data('id');
+            insTb.update(id, {sex: data.value});
+        });
+
+        // 监听switch开关切换事件
+        form.on('switch(ckState)', function (data) {
+            insTb.update(data.value, {state: data.elem.checked ? 0 : 1});
+        });
+
+        // 工具列点击事件
+        treeTable.on('tool(demoTreeTb)', function (obj) {
+            var event = obj.event;
+            if (event === 'del') {
+                if (obj.data.children && obj.data.children.length > 0) return layer.msg('有子级不能删除');
+                obj.del();
+                layer.msg('删除成功');
+            } else if (event === 'edit') {
+                layer.msg('修改成功');
+                obj.update({name: '新的名称'});
+                renderLayDate();
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
