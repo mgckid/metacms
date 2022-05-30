@@ -83,7 +83,7 @@ function getSign() {
 }
 
 function appRequest($url, $data = [], $is_json = false, $header = array(), $timeout = 10) {
-    Curlhelper::getInstance()->setopt([CURLOPT_PROXY => '127.0.0.1:8888']);
+    //Curlhelper::getInstance()->setopt([CURLOPT_PROXY => '127.0.0.1:8888']);
     if ($is_json and !is_scalar($data))
         $data = json_encode($data, JSON_UNESCAPED_UNICODE);
     if ($is_json && empty($header)) {
