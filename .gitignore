@@ -3,3 +3,6 @@
 /vendor
 *.log
 .env
+runtime/cache/
+runtime/temp/
+runtime/

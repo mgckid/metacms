@@ -194,7 +194,7 @@ class  Site extends UserBase {
                     'value' => $param[$name] ?? '',
                 ];
             }
-            $res = appRequest('appdal/siteConfig/edit', $add_data);
+            $res = appRequest('appdal/siteConfig/edit', ['site_config' => $add_data]);
             return json($res);
         } else {
             $result = appRequest('appdal/siteConfig/getall', 'get');

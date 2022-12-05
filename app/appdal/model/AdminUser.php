@@ -442,7 +442,7 @@ class AdminUser extends Model {
             #验证
             $rules = array(
                 'username' => 'require|alpha',
-                'password' => 'require|alphaNum|min:6',
+                'password' => 'require|alphaNum|min:5',
             );
             $message = array(
                 'username.require' => '用户名必须填写',
@@ -546,7 +546,7 @@ class AdminUser extends Model {
                 array(
                     'id|用户id' => 'require',
                     'old_password|旧的密码' => 'require',
-                    'password|新的密码' => 'require|alphaNum|min:6',
+                    'password|新的密码' => 'require|alphaNum|min:5',
                     'repassword|确认密码' => 'require|confirm:password',
                 ), [], true, false);
             if ($validate->check($param) === false) {
@@ -578,7 +578,7 @@ class AdminUser extends Model {
             $validate = validate(
                 array(
                     'id|用户id' => 'require',
-                    'password|新的密码' => 'require|alphaNum|min:6',
+                    'password|新的密码' => 'require|alphaNum|min:5',
                     'repassword|确认密码' => 'require|confirm:password',
                 ), [], true, false);
             if ($validate->check($param) === false) {

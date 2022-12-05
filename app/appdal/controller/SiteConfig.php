@@ -51,7 +51,7 @@ class SiteConfig extends Base {
     public function edit() {
         $param = Request::param();
         $model = new SiteConfigModel;
-        $result = $model->edit($param);
+        $result = $model->edit($param['site_config'] ?? []);
         return json($result);
     }
 
